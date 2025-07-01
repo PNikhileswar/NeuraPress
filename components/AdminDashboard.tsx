@@ -65,7 +65,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const generateArticlesFromTrends = async () => {
+  const generateArticlesFromTrends = async (maxAge = 7) => {
     setGenerating(true);
     try {
       const response = await fetch('/api/trending/generate', {
@@ -76,17 +76,19 @@ export default function AdminDashboard() {
         body: JSON.stringify({
           count: 5,
           categories: ['technology', 'business', 'health'],
+          maxAge: maxAge, // Only generate if no similar article in last X days
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        alert(`Generated ${result.articles?.length || 0} new articles!`);
+        alert(`Generated ${result.articles?.length || 0} new articles!${result.errors ? ` (${result.errors.length} errors)` : ''}`);
         if (activeTab === 'articles') {
           fetchArticles();
         }
       } else {
-        alert('Failed to generate articles');
+        const error = await response.json();
+        alert(`Failed to generate articles: ${error.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error generating articles:', error);
@@ -175,11 +177,18 @@ export default function AdminDashboard() {
               <h3 className="text-lg font-semibold text-yellow-800 mb-2">Quick Actions</h3>
               <div className="space-y-3">
                 <button
-                  onClick={generateArticlesFromTrends}
+                  onClick={() => generateArticlesFromTrends(7)}
                   disabled={generating}
                   className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
                 >
-                  {generating ? 'Generating...' : '🤖 Generate Articles from Trends'}
+                  {generating ? 'Generating...' : '🤖 Generate Articles (Skip Recent)'}
+                </button>
+                <button
+                  onClick={() => generateArticlesFromTrends(1)}
+                  disabled={generating}
+                  className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+                >
+                  {generating ? 'Generating...' : '� Generate Articles (1 Day Check)'}
                 </button>
                 <p className="text-sm text-yellow-700">
                   Automatically create new articles based on current trending topics
@@ -325,7 +334,7 @@ export default function AdminDashboard() {
                 Automatically create high-quality articles based on current trending topics using AI.
               </p>
               <button
-                onClick={generateArticlesFromTrends}
+                onClick={() => generateArticlesFromTrends(7)}
                 disabled={generating}
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 font-medium"
               >

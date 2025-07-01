@@ -59,7 +59,6 @@ const ArticleSchema = new mongoose.Schema<IArticle>({
 
 // Index for better search performance
 ArticleSchema.index({ title: 'text', content: 'text', tags: 'text' });
-ArticleSchema.index({ slug: 1 });
 ArticleSchema.index({ publishedAt: -1 });
 ArticleSchema.index({ category: 1 });
 

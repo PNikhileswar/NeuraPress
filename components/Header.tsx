@@ -12,10 +12,9 @@ export default function Header() {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Technology', href: '/?category=technology' },
-    { name: 'Business', href: '/?category=business' },
-    { name: 'Health', href: '/?category=health' },
-    { name: 'Lifestyle', href: '/?category=lifestyle' },
+    { name: 'Categories', href: '/categories' },
+    { name: 'Trending', href: '/trending' },
+    { name: 'About', href: '/about' },
   ];
 
   return (

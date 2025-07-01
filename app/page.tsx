@@ -25,7 +25,7 @@ export default async function HomePage({
 
         <FeaturedArticles />
         
-        <section className="mt-12">
+        <section id="latest-articles" className="mt-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Articles</h2>
           <ArticleGrid 
             searchParams={searchParams}

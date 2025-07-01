@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from './OptimizedImage';
 import { formatDate } from '@/lib/utils';
 
 interface Article {
@@ -30,7 +30,7 @@ async function getArticles(searchParams: ArticleGridProps['searchParams']) {
   if (searchParams.page) params.append('page', searchParams.page);
   params.append('limit', '12');
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
   
   try {
     const response = await fetch(`${baseUrl}/api/articles?${params}`, {
@@ -143,11 +143,13 @@ function ArticleCard({ article }: { article: Article }) {
     <article className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
       {article.ogImage && (
         <div className="aspect-video relative overflow-hidden">
-          <Image
+          <OptimizedImage
             src={article.ogImage}
             alt={article.title}
             fill
             className="object-cover hover:scale-105 transition-transform duration-300"
+            fallbackSrc="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop&crop=center"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
       )}

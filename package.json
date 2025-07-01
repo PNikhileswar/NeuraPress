@@ -3,18 +3,18 @@
   "version": "1.0.0",
   "description": "SEO-optimized blog platform with AI content generation",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "cleanup-duplicates": "node scripts/cleanup-duplicates.js",
+    "fix-images": "node scripts/fix-images.js"
   },
   "dependencies": {
-    "@next/font": "^14.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "autoprefixer": "^10.0.0",
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.12",
     "clsx": "^2.0.0",
@@ -24,17 +24,18 @@
     "next-auth": "^4.24.0",
     "openai": "^4.20.0",
     "playwright": "^1.40.0",
-    "postcss": "^8.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-markdown": "^9.0.0",
     "slugify": "^1.6.0",
-    "tailwindcss": "^3.0.0",
     "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.0",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8.0.0",
-    "eslint-config-next": "^14.0.0"
+    "eslint-config-next": "^14.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.0"
   }
 }

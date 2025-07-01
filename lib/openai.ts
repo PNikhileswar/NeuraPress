@@ -26,6 +26,107 @@ interface GeneratedContent {
   };
 }
 
+// Fallback content generator when OpenAI is not available
+function generateFallbackContent(request: ContentGenerationRequest): GeneratedContent {
+  const { topic, keywords, category } = request;
+  
+  // Generate category-appropriate placeholder images
+  const getPlaceholderImages = (category: string, topic: string) => {
+    const categoryImages: Record<string, string[]> = {
+      technology: [
+        'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=600&h=400&fit=crop&crop=center',
+      ],
+      health: [
+        'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop&crop=center',
+      ],
+      finance: [
+        'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600&h=400&fit=crop&crop=center',
+      ],
+      business: [
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop&crop=center',
+      ],
+      environment: [
+        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&crop=center',
+      ],
+      science: [
+        'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&h=400&fit=crop&crop=center',
+      ],
+      lifestyle: [
+        'https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=800&h=600&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1200&h=800&fit=crop&crop=center',
+        'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&h=400&fit=crop&crop=center',
+      ],
+    };
+    
+    return categoryImages[category] || categoryImages.technology;
+  };
+  
+  const title = `${topic}: A Comprehensive Guide`;
+  const images = getPlaceholderImages(category, topic);
+  
+  const content = `# ${title}
+
+![${topic}](${images[0]})
+
+## Introduction
+
+${topic} has become increasingly important in today's digital landscape. This comprehensive guide explores the latest trends, insights, and practical applications related to ${topic}.
+
+## Key Insights
+
+Understanding ${topic} requires a deep dive into several key areas:
+
+### 1. Current Trends
+The landscape of ${topic} is constantly evolving. Recent developments show significant growth and innovation in this space.
+
+![Trends in ${topic}](${images[1]})
+
+### 2. Best Practices
+When working with ${topic}, it's essential to follow industry best practices to ensure optimal results.
+
+### 3. Future Outlook
+Looking ahead, ${topic} is expected to continue growing and evolving, presenting new opportunities and challenges.
+
+## Keywords and Related Topics
+
+This article covers important aspects related to: ${keywords.join(', ')}.
+
+![${topic} Applications](${images[2]})
+
+## Conclusion
+
+${topic} represents a significant opportunity for businesses and individuals alike. By understanding the key concepts and staying updated with the latest trends, you can leverage ${topic} to achieve your goals.
+
+*This article was generated using TrendWise's content generation system.*`;
+
+  return {
+    title,
+    content,
+    metaDescription: `Discover everything you need to know about ${topic}. Expert insights, trends, and practical guidance.`,
+    metaKeywords: keywords,
+    excerpt: `A comprehensive guide to ${topic}, covering the latest trends, best practices, and future outlook.`,
+    tags: keywords.slice(0, 5),
+    readingTime: 5,
+    seoData: {
+      title,
+      description: `Learn about ${topic} with this comprehensive guide covering trends, insights, and best practices.`,
+      keywords: keywords,
+    },
+  };
+}
+
 export async function generateArticleContent(request: ContentGenerationRequest): Promise<GeneratedContent> {
   const { topic, keywords, category, mediaUrls = [] } = request;
 
@@ -62,7 +163,7 @@ export async function generateArticleContent(request: ContentGenerationRequest):
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
@@ -93,7 +194,18 @@ export async function generateArticleContent(request: ContentGenerationRequest):
       readingTime,
     };
   } catch (error) {
-    console.error('Error generating content:', error);
+    console.error('Error generating content with OpenAI:', error);
+    
+    // Check if it's a quota/billing issue
+    if (error instanceof Error && (
+      error.message.includes('insufficient_quota') ||
+      error.message.includes('quota') ||
+      error.message.includes('billing')
+    )) {
+      console.log('OpenAI quota exceeded, using fallback content generation');
+      return generateFallbackContent(request);
+    }
+    
     throw new Error('Failed to generate article content');
   }
 }

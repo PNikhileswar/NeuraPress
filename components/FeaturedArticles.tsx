@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from './OptimizedImage';
 import { formatDate } from '@/lib/utils';
 
 interface Article {
@@ -15,7 +15,7 @@ interface Article {
 }
 
 async function getFeaturedArticles() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
   
   try {
     const response = await fetch(`${baseUrl}/api/articles?featured=true&limit=3`, {
@@ -75,11 +75,13 @@ function FeaturedArticleCard({ article, isLarge }: { article: Article; isLarge: 
     >
       <div className={`relative ${isLarge ? 'h-96' : 'h-64'} overflow-hidden`}>
         {article.ogImage ? (
-          <Image
+          <OptimizedImage
             src={article.ogImage}
             alt={article.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
+            fallbackSrc="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop&crop=center"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">

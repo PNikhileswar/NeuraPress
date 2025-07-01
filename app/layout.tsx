@@ -66,9 +66,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-gray-50`}>
         <SessionProvider>
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
             <main className="flex-1">
               {children}

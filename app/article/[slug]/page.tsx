@@ -210,8 +210,25 @@ export default async function ArticlePage({
         </header>
 
         {/* Content */}
-        <div className="prose prose-lg max-w-none mb-12">
-          <ReactMarkdown>{article.content}</ReactMarkdown>
+        <div className="prose prose-lg max-w-none mb-12 bg-white rounded-lg p-8 shadow-sm">
+          <ReactMarkdown
+            components={{
+              img: ({ src, alt, ...props }) => (
+                <div className="my-8">
+                  <Image
+                    src={src || ''}
+                    alt={alt || ''}
+                    width={800}
+                    height={600}
+                    className="rounded-xl shadow-lg w-full object-cover"
+                    style={{ maxHeight: '500px' }}
+                  />
+                </div>
+              ),
+            }}
+          >
+            {article.content}
+          </ReactMarkdown>
         </div>
 
         {/* Tags */}

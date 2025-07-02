@@ -3,6 +3,7 @@ import connectDB from '@/lib/mongodb';
 import Article from '@/lib/models/Article';
 import { generateArticleContent } from '@/lib/openai';
 import { createSlug } from '@/lib/utils';
+import { invalidateStatsCache, notifyStatsUpdate } from '@/lib/stats-cache';
 
 // GET /api/articles - Get all articles with pagination
 export async function GET(request: NextRequest) {
@@ -130,6 +131,19 @@ export async function POST(request: NextRequest) {
 
     const article = new Article(articleData);
     await article.save();
+
+    // Invalidate stats cache and notify of the update
+    const updateEvent = {
+      type: 'article_created' as const,
+      articleId: article._id.toString(),
+      category: article.category,
+      timestamp: new Date()
+    };
+    
+    invalidateStatsCache(updateEvent);
+    notifyStatsUpdate(updateEvent);
+
+    console.log(`📝 Article created: "${article.title}" in ${article.category} category`);
 
     return NextResponse.json(article, { status: 201 });
   } catch (error) {

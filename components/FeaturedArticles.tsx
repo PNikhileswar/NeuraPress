@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import OptimizedImage from './OptimizedImage';
 import { formatDate } from '@/lib/utils';
 
 interface Article {
@@ -46,7 +45,7 @@ export default async function FeaturedArticles() {
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-3xl font-bold text-gray-900">Featured Articles</h2>
         <Link
-          href="/?featured=true"
+          href="/featured"
           className="text-blue-600 hover:text-blue-800 font-medium"
         >
           View All Featured →
@@ -75,13 +74,10 @@ function FeaturedArticleCard({ article, isLarge }: { article: Article; isLarge: 
     >
       <div className={`relative ${isLarge ? 'h-96' : 'h-64'} overflow-hidden`}>
         {article.ogImage ? (
-          <OptimizedImage
+          <img
             src={article.ogImage}
             alt={article.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            fallbackSrc="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop&crop=center"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -96,8 +92,8 @@ function FeaturedArticleCard({ article, isLarge }: { article: Article; isLarge: 
           </div>
         )}
         
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
+        {/* Enhanced Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         
         {/* Featured Badge */}
         <div className="absolute top-4 left-4">
@@ -107,32 +103,32 @@ function FeaturedArticleCard({ article, isLarge }: { article: Article; isLarge: 
         </div>
       </div>
 
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+      {/* Content - Enhanced for better visibility */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 text-white bg-gradient-to-t from-black/90 to-transparent">
         <div className="flex items-center space-x-2 text-sm mb-3">
-          <span className="bg-white bg-opacity-20 px-2 py-1 rounded text-xs font-medium">
+          <span className="bg-white bg-opacity-30 backdrop-blur-sm px-2 py-1 rounded text-xs font-medium text-white">
             {article.category}
           </span>
-          <span>•</span>
-          <span>{formatDate(new Date(article.publishedAt))}</span>
-          <span>•</span>
-          <span>{article.readingTime} min read</span>
+          <span className="text-white">•</span>
+          <span className="text-gray-100">{formatDate(new Date(article.publishedAt))}</span>
+          <span className="text-white">•</span>
+          <span className="text-gray-100">{article.readingTime} min read</span>
         </div>
 
-        <h3 className={`font-bold mb-3 line-clamp-2 ${isLarge ? 'text-2xl' : 'text-lg'}`}>
+        <h3 className={`font-bold mb-3 line-clamp-2 text-white drop-shadow-lg ${isLarge ? 'text-2xl' : 'text-lg'}`}>
           <Link href={`/article/${article.slug}`} className="hover:text-gray-200 transition-colors">
             {article.title}
           </Link>
         </h3>
 
-        <p className={`text-gray-200 line-clamp-2 ${isLarge ? 'text-base' : 'text-sm'}`}>
+        <p className={`text-gray-100 line-clamp-2 drop-shadow-md ${isLarge ? 'text-base' : 'text-sm'}`}>
           {article.excerpt}
         </p>
 
         <div className="mt-4">
           <Link
             href={`/article/${article.slug}`}
-            className="inline-flex items-center text-yellow-400 hover:text-yellow-300 font-medium text-sm"
+            className="inline-flex items-center text-yellow-300 hover:text-yellow-200 font-medium text-sm drop-shadow-md"
           >
             Read Full Article
             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

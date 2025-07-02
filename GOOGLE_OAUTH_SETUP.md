@@ -34,7 +34,7 @@
 
 4. For Application type, select "Web application"
 5. Add authorized redirect URIs:
-   - For development: `http://localhost:3000/api/auth/callback/google`
+   - For development: `http://localhost:3001/api/auth/callback/google`
    - For development (current port): `http://localhost:3001/api/auth/callback/google`
    - For production: `https://your-vercel-domain.vercel.app/api/auth/callback/google`
 

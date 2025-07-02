@@ -11,10 +11,10 @@ export default function Footer() {
       { name: 'Terms of Service', href: '/terms' },
     ],
     'Categories': [
-      { name: 'Technology', href: '/?category=technology' },
-      { name: 'Business', href: '/?category=business' },
-      { name: 'Health', href: '/?category=health' },
-      { name: 'Lifestyle', href: '/?category=lifestyle' },
+      { name: 'Technology', href: '/category/technology' },
+      { name: 'Business', href: '/category/business' },
+      { name: 'Health', href: '/category/health' },
+      { name: 'Lifestyle', href: '/category/lifestyle' },
     ],
     'Resources': [
       { name: 'RSS Feed', href: '/rss.xml' },

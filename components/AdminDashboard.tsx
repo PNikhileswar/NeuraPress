@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import StatsDashboard from '@/components/StatsDashboard';
 
 interface TrendingTopic {
   topic: string;
@@ -26,14 +27,23 @@ export default function AdminDashboard() {
   const [trendingTopics, setTrendingTopics] = useState<TrendingTopic[]>([]);
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<{show: boolean; article: Article | null}>({
+    show: false,
+    article: null
+  });
 
   useEffect(() => {
-    if (activeTab === 'articles') {
+    if (activeTab === 'articles' || activeTab === 'overview') {
       fetchArticles();
     } else if (activeTab === 'trending') {
       fetchTrendingTopics();
     }
   }, [activeTab]);
+
+  // Fetch articles on component mount for overview statistics
+  useEffect(() => {
+    fetchArticles();
+  }, []);
 
   const fetchArticles = async () => {
     setLoading(true);
@@ -121,6 +131,33 @@ export default function AdminDashboard() {
     }
   };
 
+  const deleteArticle = async (article: Article) => {
+    try {
+      const response = await fetch(`/api/articles/${article.slug}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setArticles(articles.filter(a => a._id !== article._id));
+        setDeleteConfirm({ show: false, article: null });
+        alert('Article deleted successfully');
+      } else {
+        alert('Failed to delete article');
+      }
+    } catch (error) {
+      console.error('Error deleting article:', error);
+      alert('Error deleting article');
+    }
+  };
+
+  const showDeleteConfirm = (article: Article) => {
+    setDeleteConfirm({ show: true, article });
+  };
+
+  const hideDeleteConfirm = () => {
+    setDeleteConfirm({ show: false, article: null });
+  };
+
   const tabs = [
     { id: 'overview', name: 'Overview', icon: '📊' },
     { id: 'articles', name: 'Articles', icon: '📝' },
@@ -154,6 +191,13 @@ export default function AdminDashboard() {
       <div className="p-6">
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {/* Dynamic Stats Dashboard */}
+            <StatsDashboard 
+              showMediaStats={true} 
+              showCategoryBreakdown={true} 
+              autoRefresh={true}
+            />
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-blue-50 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold text-blue-900 mb-2">Total Articles</h3>
@@ -255,14 +299,22 @@ export default function AdminDashboard() {
                           </button>
                         </td>
                         <td className="px-4 py-3">
-                          <a
-                            href={`/article/${article.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-900 text-sm font-medium"
-                          >
-                            View
-                          </a>
+                          <div className="flex space-x-2">
+                            <a
+                              href={`/article/${article.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                            >
+                              View
+                            </a>
+                            <button
+                              onClick={() => showDeleteConfirm(article)}
+                              className="text-red-600 hover:text-red-900 text-sm font-medium"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -371,6 +423,34 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm.show && deleteConfirm.article && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Delete Article
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to delete "{deleteConfirm.article.title}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={hideDeleteConfirm}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => deleteArticle(deleteConfirm.article!)}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

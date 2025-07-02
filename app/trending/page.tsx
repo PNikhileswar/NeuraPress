@@ -4,7 +4,7 @@ import { formatDate } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Trending Topics - TrendWise',
-  description: 'Discover the hottest trending topics and AI-generated insights.',
+  description: 'Discover trending topics that could become new articles. Generate AI-powered content from current trends.',
 };
 
 interface TrendingTopic {
@@ -45,16 +45,27 @@ export default async function TrendingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Trending Topics
+              Trending Topic Suggestions
             </h1>
-            <p className="text-xl text-purple-100 mb-8">
-              Stay ahead of the curve with AI-curated trending topics from across the web
+            <p className="text-xl text-purple-100 mb-4">
+              Discover trending topics that could become new AI-generated articles
             </p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6">
+              <p className="text-sm text-purple-100">
+                💡 <strong>How it works:</strong> These are trending topics from Google Trends and social media that our AI can turn into comprehensive articles for your blog.
+              </p>
+            </div>
             <Link
               href="/admin"
-              className="inline-block bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="inline-block bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors mr-4"
             >
-              Admin Dashboard
+              Generate Articles
+            </Link>
+            <Link
+              href="/"
+              className="inline-block bg-purple-500/20 text-white border border-white/30 px-8 py-3 rounded-lg font-semibold hover:bg-purple-500/30 transition-colors"
+            >
+              View Existing Articles
             </Link>
           </div>
         </div>
@@ -63,9 +74,23 @@ export default async function TrendingPage() {
       {/* Trending Topics Grid */}
       <section className="container mx-auto px-4 py-16">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Current Trending Topics</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Current Trending Topic Suggestions</h2>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <h3 className="text-sm font-semibold text-blue-900 mb-1">About Trending Topics</h3>
+                <p className="text-sm text-blue-800">
+                  These are <strong>trending topics from external sources</strong> (Google Trends, social media) that our AI can transform into full articles for your blog. 
+                  They are <strong>not existing articles</strong> but <strong>content suggestions</strong> ready to be generated.
+                </p>
+              </div>
+            </div>
+          </div>
           <p className="text-gray-600">
-            {topics.length} trending topics discovered across various categories
+            {topics.length} trending topic suggestions available for article generation
           </p>
         </div>
 
@@ -74,7 +99,7 @@ export default async function TrendingPage() {
             {topics.map((topic: TrendingTopic, index: number) => (
               <div
                 key={index}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-100 hover:border-blue-200"
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -95,20 +120,35 @@ export default async function TrendingPage() {
                 </h3>
 
                 <p className="text-gray-600 mb-4 line-clamp-3">
-                  Trending in {topic.category} with keywords: {topic.keywords.slice(0, 3).join(', ')}
+                  <strong>Keywords:</strong> {topic.keywords.slice(0, 3).join(', ')}
+                  <br />
+                  <strong>Trending source:</strong> {topic.source}
                 </p>
 
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>Source: {topic.source}</span>
-                  <span>{topic.popularity.toLocaleString()} popularity</span>
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <span className="flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    {topic.popularity.toLocaleString()} searches
+                  </span>
+                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                    Ready to Generate
+                  </span>
                 </div>
 
-                <div className="mt-4">
+                <div className="flex gap-2">
                   <Link
-                    href={`/?category=${topic.category.toLowerCase()}`}
-                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                    href={`/admin?topic=${encodeURIComponent(topic.topic)}&category=${topic.category}`}
+                    className="flex-1 text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                   >
-                    View Articles
+                    🤖 Generate Article
+                  </Link>
+                  <Link
+                    href={`/category/${topic.category.toLowerCase()}`}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    View {topic.category}
                   </Link>
                 </div>
               </div>

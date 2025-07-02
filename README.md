@@ -11,6 +11,8 @@ A full-stack, SEO-optimized blog platform that automatically generates content f
 - **Comment System**: Interactive commenting with replies
 - **Responsive Design**: Beautiful, modern UI with TailwindCSS
 - **Admin Dashboard**: Content management and bulk generation tools
+- **Smart Image System**: Optimized image loading with unique, category-specific images
+- **Performance Optimized**: Fast loading with Next.js Image optimization
 
 ## 🛠️ Tech Stack
 
@@ -43,7 +45,7 @@ Create a `.env.local` file in the root directory:
 
 ```env
 # Next.js
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3001
 NEXTAUTH_SECRET=your-secret-key-here
 
 # Google OAuth
@@ -66,7 +68,7 @@ MONGODB_URI=mongodb://localhost:27017/trendwise
 3. Enable Google+ API
 4. Create OAuth 2.0 credentials
 5. Add authorized redirect URIs:
-   - `http://localhost:3000/api/auth/callback/google` (development)
+   - `http://localhost:3001/api/auth/callback/google` (development)
    - `https://your-domain.vercel.app/api/auth/callback/google` (production)
 
 ### 5. Set Up OpenAI
@@ -96,7 +98,7 @@ Option B - MongoDB Atlas:
 npm run dev
 ```
 
-Visit `http://localhost:3000` to see the application.
+Visit `http://localhost:3001` to see the application.
 
 ## 🚀 Deployment
 

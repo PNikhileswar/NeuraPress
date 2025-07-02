@@ -1,107 +1,46 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+// Update the import path if the file is located elsewhere, for example:
+import DynamicCategoriesGrid from '../../components/DynamicCategoriesGrid';
+// Or create the file at src/components/DynamicCategoriesGrid.tsx if it does not exist.
 
 export const metadata: Metadata = {
   title: 'Categories - TrendWise',
-  description: 'Explore all article categories on TrendWise.',
+  description: 'Explore all article categories on TrendWise with real-time article counts.',
 };
-
-const categories = [
-  {
-    name: 'Technology',
-    slug: 'technology',
-    description: 'Latest tech trends, AI, software development, and digital innovation.',
-    icon: '💻',
-    color: 'from-blue-500 to-cyan-500',
-    articles: '250+',
-  },
-  {
-    name: 'Business',
-    slug: 'business',
-    description: 'Entrepreneurship, market insights, startup stories, and business strategies.',
-    icon: '📈',
-    color: 'from-green-500 to-emerald-500',
-    articles: '180+',
-  },
-  {
-    name: 'Health',
-    slug: 'health',
-    description: 'Wellness tips, medical breakthroughs, fitness, and mental health.',
-    icon: '🏥',
-    color: 'from-red-500 to-pink-500',
-    articles: '120+',
-  },
-  {
-    name: 'Lifestyle',
-    slug: 'lifestyle',
-    description: 'Travel, food, culture, entertainment, and personal development.',
-    icon: '🌟',
-    color: 'from-purple-500 to-indigo-500',
-    articles: '200+',
-  },
-];
 
 export default function CategoriesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-gray-900 to-gray-700 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Explore Categories
-            </h1>
-            <p className="text-xl text-gray-300 mb-8">
-              Discover content organized by your interests and expertise areas
-            </p>
-          </div>
+      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Explore by Category
+          </h1>
+          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+            Discover AI-curated content organized by your interests. Each category features 
+            rich multimedia content including images, videos, and social media insights.
+          </p>
         </div>
       </section>
 
       {/* Categories Grid */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {categories.map((category) => (
-            <Link
-              key={category.slug}
-              href={`/category/${category.slug}`}
-              className="group block"
-            >
-              <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform group-hover:-translate-y-1">
-                <div className={`h-32 bg-gradient-to-r ${category.color} relative`}>
-                  <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-                  <div className="absolute bottom-4 left-6">
-                    <div className="text-4xl mb-2">{category.icon}</div>
-                    <h2 className="text-2xl font-bold text-white">{category.name}</h2>
-                  </div>
-                  <div className="absolute top-4 right-6 text-white text-sm font-medium bg-white bg-opacity-20 px-3 py-1 rounded-full">
-                    {category.articles} articles
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    {category.description}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="text-blue-600 font-semibold group-hover:text-blue-800 transition-colors">
-                      Explore {category.name} →
-                    </span>
-                    <div className="flex space-x-1">
-                      {[...Array(5)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="w-2 h-2 bg-gray-200 rounded-full group-hover:bg-blue-600 transition-colors"
-                          style={{ transitionDelay: `${i * 50}ms` }}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Browse All Categories
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Choose from our diverse range of topics. Article counts update in real-time 
+                as new content is added to the platform.
+              </p>
+            </div>
+
+            <DynamicCategoriesGrid />
+          </div>
         </div>
       </section>
 

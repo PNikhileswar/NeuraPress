@@ -1,5 +1,25 @@
 import mongoose from 'mongoose';
 
+export interface IMediaItem {
+  id: string;
+  url: string;
+  thumbnailUrl?: string;
+  title?: string;
+  description?: string;
+  source: 'unsplash' | 'pexels' | 'youtube' | 'vimeo';
+  type: 'image' | 'video';
+  tags: string[];
+  relevanceScore: number;
+  metadata: {
+    width?: number;
+    height?: number;
+    duration?: number;
+    photographer?: string;
+    publishedAt?: string;
+    license?: string;
+  };
+}
+
 export interface IArticle {
   _id?: string;
   title: string;
@@ -17,8 +37,8 @@ export interface IArticle {
   readingTime: number;
   featured: boolean;
   media: {
-    images: string[];
-    videos: string[];
+    images: IMediaItem[];
+    videos: IMediaItem[];
     tweets: string[];
   };
   seoData: {
@@ -44,8 +64,44 @@ const ArticleSchema = new mongoose.Schema<IArticle>({
   readingTime: { type: Number, required: true },
   featured: { type: Boolean, default: false },
   media: {
-    images: [{ type: String }],
-    videos: [{ type: String }],
+    images: [{
+      id: { type: String },
+      url: { type: String },
+      thumbnailUrl: { type: String },
+      title: { type: String },
+      description: { type: String },
+      source: { type: String, enum: ['unsplash', 'pexels', 'youtube', 'vimeo'] },
+      type: { type: String, enum: ['image', 'video'] },
+      tags: [{ type: String }],
+      relevanceScore: { type: Number },
+      metadata: {
+        width: { type: Number },
+        height: { type: Number },
+        duration: { type: Number },
+        photographer: { type: String },
+        publishedAt: { type: String },
+        license: { type: String },
+      }
+    }],
+    videos: [{
+      id: { type: String },
+      url: { type: String },
+      thumbnailUrl: { type: String },
+      title: { type: String },
+      description: { type: String },
+      source: { type: String, enum: ['unsplash', 'pexels', 'youtube', 'vimeo'] },
+      type: { type: String, enum: ['image', 'video'] },
+      tags: [{ type: String }],
+      relevanceScore: { type: Number },
+      metadata: {
+        width: { type: Number },
+        height: { type: Number },
+        duration: { type: Number },
+        photographer: { type: String },
+        publishedAt: { type: String },
+        license: { type: String },
+      }
+    }],
     tweets: [{ type: String }],
   },
   seoData: {

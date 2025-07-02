@@ -19,7 +19,7 @@ interface RelatedArticlesProps {
 }
 
 async function getRelatedArticles(category: string, currentSlug: string): Promise<Article[]> {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
   
   try {
     const response = await fetch(`${baseUrl}/api/articles?category=${category}&limit=4`, {

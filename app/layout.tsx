@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'TrendWise Team' }],
   creator: 'TrendWise',
   publisher: 'TrendWise',
-  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3001'),
   alternates: {
     canonical: '/',
   },

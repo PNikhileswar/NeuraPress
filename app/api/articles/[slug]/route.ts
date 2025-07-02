@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Article from '@/lib/models/Article';
+import { invalidateStatsCache, notifyStatsUpdate } from '@/lib/stats-cache';
 
 // GET /api/articles/[slug] - Get single article by slug
 export async function GET(
@@ -64,6 +65,19 @@ export async function PUT(
       );
     }
 
+    // Invalidate stats cache and notify of the update
+    const updateEvent = {
+      type: 'article_updated' as const,
+      articleId: article._id.toString(),
+      category: article.category,
+      timestamp: new Date()
+    };
+    
+    invalidateStatsCache(updateEvent);
+    notifyStatsUpdate(updateEvent);
+
+    console.log(`✏️ Article updated: "${article.title}" in ${article.category} category`);
+
     return NextResponse.json(article);
   } catch (error) {
     console.error('Error updating article:', error);
@@ -90,6 +104,19 @@ export async function DELETE(
         { status: 404 }
       );
     }
+
+    // Invalidate stats cache and notify of the deletion
+    const deleteEvent = {
+      type: 'article_deleted' as const,
+      articleId: article._id.toString(),
+      category: article.category,
+      timestamp: new Date()
+    };
+    
+    invalidateStatsCache(deleteEvent);
+    notifyStatsUpdate(deleteEvent);
+
+    console.log(`🗑️ Article deleted: "${article.title}" from ${article.category} category`);
 
     return NextResponse.json({ message: 'Article deleted successfully' });
   } catch (error) {

@@ -26,33 +26,81 @@ export async function POST(request: NextRequest) {
     const topicsToGenerate = filteredTopics.slice(0, count);
     console.log(`Will attempt to generate ${topicsToGenerate.length} articles`);
     
-    const generatedArticles = [];
-    const errors = [];
-
+    // Pre-filter topics to exclude those with recent articles (more efficient)
+    console.log('Pre-filtering topics to exclude those with recent articles...');
+    const maxAgeDate = new Date();
+    maxAgeDate.setDate(maxAgeDate.getDate() - maxAge);
+    
+    const availableTopics = [];
+    const skippedTopics = [];
+    
     for (const topic of topicsToGenerate) {
-      try {
-        // Check if we have a recent article on this topic (within maxAge days)
-        const maxAgeDate = new Date();
-        maxAgeDate.setDate(maxAgeDate.getDate() - maxAge);
+      // Check if we have a recent article on this topic with more precise matching
+      // Clean topic words by removing punctuation and filtering out short words
+      const topicWords = topic.topic.toLowerCase()
+        .replace(/[^\w\s]/g, ' ') // Replace punctuation with spaces
+        .split(/\s+/) // Split by whitespace
+        .filter(word => word.length > 3); // Filter out short words
+      
+      const significantWords = topicWords.slice(0, 2); // Take first 2 significant words
+      
+      let recentArticle = null;
+      
+      if (significantWords.length >= 2) {
+        // Create a more precise regex that requires both significant words to be present
+        const titleRegex = new RegExp(significantWords.join('.*'), 'i');
         
-        const recentArticle = await Article.findOne({
+        recentArticle = await Article.findOne({
           $and: [
             {
               $or: [
-                { title: { $regex: topic.topic.split(' ').slice(0, 3).join('|'), $options: 'i' } },
-                { tags: { $in: topic.keywords.slice(0, 2) } }
+                { title: { $regex: titleRegex } },
+                // Only match exact topic in tags (case insensitive)
+                { tags: { $in: [topic.topic.toLowerCase(), ...topic.keywords.map(k => k.toLowerCase())] } }
               ]
             },
             { publishedAt: { $gte: maxAgeDate } }
           ]
         });
+      }
 
-        if (recentArticle) {
-          console.log(`Recent article exists for topic: ${topic.topic} (published: ${recentArticle.publishedAt})`);
-          continue;
-        }
+      if (recentArticle) {
+        console.log(`⏭️  Skipping topic: "${topic.topic}" - Recent article exists: "${recentArticle.title}" (published: ${recentArticle.publishedAt.toLocaleDateString()})`);
+        skippedTopics.push({
+          topic: topic.topic,
+          reason: 'Recent article exists',
+          existingTitle: recentArticle.title,
+          publishedAt: recentArticle.publishedAt
+        });
+      } else {
+        console.log(`✅ Topic available for generation: "${topic.topic}"`);
+        availableTopics.push(topic);
+      }
+    }
+    
+    console.log(`\n📊 Pre-filtering results:`);
+    console.log(`   Available topics: ${availableTopics.length}`);
+    console.log(`   Skipped topics: ${skippedTopics.length}`);
+    
+    if (availableTopics.length === 0) {
+      console.log('⚠️  No available topics for generation - all have recent articles');
+      return NextResponse.json({
+        message: 'No new articles generated - all topics have recent articles',
+        availableTopics: 0,
+        skippedTopics: skippedTopics.length,
+        skippedDetails: skippedTopics,
+        suggestion: `Try increasing maxAge (currently ${maxAge} days) or adding more diverse topics`
+      });
+    }
+    
+    console.log(`\n🚀 Starting generation for ${availableTopics.length} available topics...\n`);
+    
+    const generatedArticles = [];
+    const errors = [];
 
-        console.log(`Generating article for topic: ${topic.topic}`);
+    for (const topic of availableTopics) {
+      try {
+        console.log(`📝 Generating article for topic: "${topic.topic}" (${topic.category})`);
 
         // Generate content using AI
         const generatedContent = await generateArticleContent({
@@ -74,25 +122,31 @@ export async function POST(request: NextRequest) {
           uniqueSlug = `${baseSlug}-${randomSuffix}`;
         }
 
-        // Extract image URLs from content
+        // Extract first image URL for ogImage (improved logic)
         const imageRegex = /!\[.*?\]\((.*?)\)/g;
-        const images: string[] = [];
-        let match;
-        while ((match = imageRegex.exec(generatedContent.content)) !== null) {
-          images.push(match[1]);
+        const imageMatch = imageRegex.exec(generatedContent.content);
+        let ogImageUrl = imageMatch ? imageMatch[1] : undefined;
+        
+        // If no image found in content, use first media image
+        if (!ogImageUrl && generatedContent.media.images.length > 0) {
+          ogImageUrl = generatedContent.media.images[0].url;
         }
+        
+        // If still no image, ensure we have a fallback
+        if (!ogImageUrl) {
+          ogImageUrl = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=800&fit=crop&crop=center';
+          console.log('⚠️ Using default fallback ogImage');
+        }
+        
+        console.log(`🖼️ OG Image set to: ${ogImageUrl}`);
 
         const articleData = {
           ...generatedContent,
           slug: uniqueSlug, // Use the unique slug we generated
           category: topic.category,
-          ogImage: images.length > 0 ? images[0] : undefined, // Set first image as ogImage
+          ogImage: ogImageUrl, // Set first image as ogImage
           featured: Math.random() > 0.7, // 30% chance of being featured
-          media: {
-            images: images,
-            videos: [],
-            tweets: [],
-          },
+          // Media is already properly structured from generateArticleContent
         };
 
         const article = new Article(articleData);
@@ -111,16 +165,26 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(`Successfully generated ${generatedArticles.length} articles`);
+    console.log(`\n✅ Generation completed!`);
+    console.log(`   Successfully generated: ${generatedArticles.length} articles`);
+    console.log(`   Skipped (recent articles): ${skippedTopics.length} topics`);
     if (errors.length > 0) {
-      console.log(`Encountered ${errors.length} errors:`, errors);
+      console.log(`   Errors encountered: ${errors.length}`);
+      errors.forEach(error => console.log(`   - ${error.topic}: ${error.error}`));
     }
 
     return NextResponse.json({
       message: `Generated ${generatedArticles.length} articles from trending topics`,
       articles: generatedArticles,
+      statistics: {
+        generated: generatedArticles.length,
+        skipped: skippedTopics.length,
+        errors: errors.length,
+        totalTopicsChecked: topicsToGenerate.length
+      },
+      skippedTopics: skippedTopics,
       errors: errors.length > 0 ? errors : undefined,
-      totalTopicsAttempted: topicsToGenerate.length,
+      totalTopicsAttempted: availableTopics.length,
     });
   } catch (error) {
     console.error('Error generating articles from trending topics:', error);

@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { formatDate } from '@/lib/utils';
 import CommentSection from '@/components/CommentSection';
 import ShareButtons from '@/components/ShareButtons';
 import RelatedArticles from '@/components/RelatedArticles';
+import MediaSection from '@/components/MediaSection';
 
 interface Article {
   _id: string;
@@ -20,6 +22,47 @@ interface Article {
   tags: string[];
   author: string;
   ogImage?: string;
+  media: {
+    images: Array<{
+      id: string;
+      url: string;
+      thumbnailUrl?: string;
+      title?: string;
+      description?: string;
+      source: 'unsplash' | 'pexels' | 'youtube' | 'vimeo';
+      type: 'image' | 'video';
+      tags: string[];
+      relevanceScore: number;
+      metadata: {
+        width?: number;
+        height?: number;
+        duration?: number;
+        photographer?: string;
+        publishedAt?: string;
+        license?: string;
+      };
+    }>;
+    videos: Array<{
+      id: string;
+      url: string;
+      thumbnailUrl?: string;
+      title?: string;
+      description?: string;
+      source: 'unsplash' | 'pexels' | 'youtube' | 'vimeo';
+      type: 'image' | 'video';
+      tags: string[];
+      relevanceScore: number;
+      metadata: {
+        width?: number;
+        height?: number;
+        duration?: number;
+        photographer?: string;
+        publishedAt?: string;
+        license?: string;
+      };
+    }>;
+    tweets: string[];
+  };
   seoData: {
     title: string;
     description: string;
@@ -28,7 +71,7 @@ interface Article {
 }
 
 async function getArticle(slug: string): Promise<Article | null> {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
   
   try {
     const response = await fetch(`${baseUrl}/api/articles/${slug}`, {
@@ -60,7 +103,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
 
   return {
     title: article.seoData.title || article.title,
@@ -122,16 +165,16 @@ export default async function ArticlePage({
       name: 'TrendWise',
       logo: {
         '@type': 'ImageObject',
-        url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/logo.png`,
+        url: `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/logo.png`,
       },
     },
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/article/${article.slug}`,
+      '@id': `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/article/${article.slug}`,
     },
-    image: article.ogImage || `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/og-image.jpg`,
+    image: article.ogImage || `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/og-image.jpg`,
     articleSection: article.category,
     keywords: article.tags.join(', '),
   };
@@ -148,14 +191,16 @@ export default async function ArticlePage({
         <header className="mb-8">
           {/* Breadcrumb */}
           <nav className="text-sm text-gray-500 mb-4">
-            <a href="/" className="hover:text-gray-700">Home</a>
+            <Link href="/" className="hover:text-gray-700">
+              Home
+            </Link>
             <span className="mx-2">/</span>
-            <a
-              href={`/?category=${article.category}`}
+            <Link
+              href={`/category/${article.category}`}
               className="hover:text-gray-700 capitalize"
             >
               {article.category}
-            </a>
+            </Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">{article.title}</span>
           </nav>
@@ -230,6 +275,13 @@ export default async function ArticlePage({
             {article.content}
           </ReactMarkdown>
         </div>
+
+        {/* Rich Media Section */}
+        {article.media && (article.media.images.length > 0 || article.media.videos.length > 0 || article.media.tweets.length > 0) && (
+          <div className="mb-12">
+            <MediaSection media={article.media} title={article.title} />
+          </div>
+        )}
 
         {/* Tags */}
         {article.tags.length > 0 && (

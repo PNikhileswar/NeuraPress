@@ -2,6 +2,10 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/config/auth';
 import { MongoClient } from 'mongodb';
+
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 // GET /api/bookmarks/check - Check if an article is bookmarked
 export async function GET(request: NextRequest) {
   try {

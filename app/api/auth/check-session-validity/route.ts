@@ -2,6 +2,10 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/config/auth';
 import { MongoClient } from 'mongodb';
+
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 // GET /api/auth/check-session-validity - Check if current session is still valid
 export async function GET(request: NextRequest) {
   try {

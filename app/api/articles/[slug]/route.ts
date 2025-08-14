@@ -108,15 +108,15 @@ export async function DELETE(
     // Invalidate stats cache and notify of the deletion
     const deleteEvent = {
       type: 'article_deleted' as const,
-      articleId: article._id.toString(),
-      category: article.category,
+      articleId: article._id?.toString() || '',
+      category: article.category || '',
       timestamp: new Date()
     };
     
     invalidateStatsCache(deleteEvent);
     notifyStatsUpdate(deleteEvent);
 
-    console.log(`🗑️ Article deleted: "${article.title}" from ${article.category} category`);
+    console.log(`🗑️ Article deleted: "${article.title || 'Unknown'}" from ${article.category || 'Unknown'} category`);
 
     return NextResponse.json({ message: 'Article deleted successfully' });
   } catch (error) {

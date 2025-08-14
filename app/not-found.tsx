@@ -1,5 +1,4 @@
-import Link from 'next/link';
-
+﻿import Link from 'next/link';
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -14,7 +13,6 @@ export default function NotFound() {
             The page might have been moved or doesn't exist.
           </p>
         </div>
-
         <div className="space-y-4">
           <Link
             href="/"
@@ -22,7 +20,6 @@ export default function NotFound() {
           >
             Back to Home
           </Link>
-          
           <div className="grid grid-cols-2 gap-4">
             <Link
               href="/categories"
@@ -38,7 +35,6 @@ export default function NotFound() {
             </Link>
           </div>
         </div>
-
         <div className="mt-8 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-500">
             Looking for something specific? Try searching from the homepage.

@@ -1,4 +1,4 @@
-# TrendWise - AI-Powered Blog Platform
+# NeuraPress - AI-Powered Blog Platform
 
 A full-stack, SEO-optimized blog platform that automatically generates content from trending topics using AI.
 
@@ -11,7 +11,10 @@ A full-stack, SEO-optimized blog platform that automatically generates content f
 - **Comment System**: Interactive commenting with replies
 - **Responsive Design**: Beautiful, modern UI with TailwindCSS
 - **Admin Dashboard**: Content management and bulk generation tools
-- **Smart Image System**: Optimized image loading with unique, category-specific images
+### Smart Image System
+- Optimized image loading with Unsplash API integration
+- Category-specific image selection and proper attribution
+- Dynamic image resizing and smart cropping
 - **Performance Optimized**: Fast loading with Next.js Image optimization
 
 ## 🛠️ Tech Stack
@@ -21,8 +24,31 @@ A full-stack, SEO-optimized blog platform that automatically generates content f
 - **Backend**: Next.js API Routes
 - **Database**: MongoDB with Mongoose
 - **AI**: OpenAI GPT-4/3.5 Turbo
+- **Media**: Unsplash API for high-quality images
 - **Scraping**: Playwright, Cheerio
 - **Deployment**: Vercel
+
+## 📁 Project Structure
+
+The project follows a modern, scalable folder structure:
+
+```
+src/
+├── components/           # React components
+│   ├── admin/           # Admin interface components
+│   ├── features/        # Feature-specific components  
+│   ├── layout/          # Layout components (Header, Footer)
+│   └── ui/              # Reusable UI components
+├── hooks/               # Custom React hooks
+├── lib/                 # Core libraries
+│   ├── config/          # Configuration (auth, env)
+│   ├── database/        # MongoDB models & connection
+│   ├── services/        # External APIs (OpenAI, news)
+│   └── utils/           # Helper functions
+└── types/               # TypeScript type definitions
+```
+
+For detailed structure information, see [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md)
 
 ## 📋 Setup Instructions
 
@@ -30,7 +56,7 @@ A full-stack, SEO-optimized blog platform that automatically generates content f
 
 ```bash
 git clone <your-repo-url>
-cd TrendWise
+cd NeuraPress
 ```
 
 ### 2. Install Dependencies
@@ -55,10 +81,13 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 # OpenAI
 OPENAI_API_KEY=your-openai-api-key
 
+# Unsplash
+UNSPLASH_ACCESS_KEY=your-unsplash-access-key
+
 # MongoDB
-MONGODB_URI=mongodb://localhost:27017/trendwise
+MONGODB_URI=mongodb://localhost:27017/neurapress
 # Or for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/trendwise
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/neurapress
 ```
 
 ### 4. Set Up Google OAuth
@@ -77,7 +106,15 @@ MONGODB_URI=mongodb://localhost:27017/trendwise
 2. Create an API key
 3. Add it to your environment variables
 
-### 6. Set Up MongoDB
+### 6. Set Up Unsplash API
+
+1. Go to [Unsplash Developer Portal](https://unsplash.com/developers)
+2. Create a new application 
+3. Copy your Access Key (not Secret Key)
+4. Add it to your environment variables as `UNSPLASH_ACCESS_KEY`
+5. Ensure you follow the [Unsplash API Guidelines](https://help.unsplash.com/en/articles/2511315-guideline-attribution) for proper attribution
+
+### 7. Set Up MongoDB
 
 Option A - Local MongoDB:
 ```bash
@@ -92,7 +129,7 @@ Option B - MongoDB Atlas:
 3. Get connection string
 4. Add to environment variables
 
-### 7. Run Development Server
+### 8. Run Development Server
 
 ```bash
 npm run dev
@@ -118,12 +155,13 @@ In Vercel dashboard, add these environment variables:
 - `GOOGLE_CLIENT_ID`: Your Google OAuth client ID
 - `GOOGLE_CLIENT_SECRET`: Your Google OAuth client secret
 - `OPENAI_API_KEY`: Your OpenAI API key
+- `UNSPLASH_ACCESS_KEY`: Your Unsplash API access key
 - `MONGODB_URI`: Your MongoDB connection string
 
 ## 📁 Project Structure
 
 ```
-TrendWise/
+NeuraPress/
 ├── app/                    # Next.js 14 App Router
 │   ├── api/               # API routes
 │   ├── article/[slug]/    # Article detail pages

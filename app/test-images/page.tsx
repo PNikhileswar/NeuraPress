@@ -1,16 +1,13 @@
-import Image from 'next/image';
-
+﻿import Image from 'next/image';
 export default function ImageTestPage() {
   const testImages = [
     'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=1200&h=800&fit=crop&crop=center',
     'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=600&h=400&fit=crop&crop=center',
     'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=600&fit=crop&crop=center',
   ];
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Image Test Page</h1>
-      
       <div className="space-y-8">
         <h2 className="text-2xl font-semibold">Using Next.js Image Component</h2>
         {testImages.map((src, index) => (
@@ -28,7 +25,6 @@ export default function ImageTestPage() {
             </div>
           </div>
         ))}
-        
         <h2 className="text-2xl font-semibold">Using Regular img Tag</h2>
         {testImages.map((src, index) => (
           <div key={index} className="border rounded-lg p-4">

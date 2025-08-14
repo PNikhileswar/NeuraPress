@@ -1,25 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Article from '@/lib/models/Article';
-import { getCachedStats, updateStatsCache, getRecentEvents } from '@/lib/stats-cache';
-
+﻿import { NextRequest, NextResponse } from 'next/server';
+import connectDB from '@/lib/database/mongodb';
+import Article from '@/lib/database/models/Article';
+import { getCachedStats, updateStatsCache, getRecentEvents } from '@/lib/utils/stats-cache';
 // GET /api/stats - Get dynamic platform statistics
 export async function GET(request: NextRequest) {
   try {
     // Check cache first
     const cacheResult = getCachedStats();
     if (cacheResult.cached && !cacheResult.needsRefresh) {
-      console.log('📊 Returning cached stats');
+      console.log('ðŸ“Š Returning cached stats');
       return NextResponse.json({
         ...cacheResult.data,
         cached: true,
         lastUpdate: cacheResult.lastUpdate
       });
     }
-
-    console.log('📊 Fetching fresh stats from database');
+    console.log('ðŸ“Š Fetching fresh stats from database');
     await connectDB();
-
     // Get category counts
     const categoryStats = await Article.aggregate([
       {
@@ -35,7 +32,6 @@ export async function GET(request: NextRequest) {
         $sort: { count: -1 }
       }
     ]);
-
     // Get media statistics
     const mediaStats = await Article.aggregate([
       {
@@ -66,22 +62,18 @@ export async function GET(request: NextRequest) {
         }
       }
     ]);
-
     // Get overall statistics
     const totalArticles = await Article.countDocuments();
     const featuredArticles = await Article.countDocuments({ featured: true });
     const totalReadingTime = await Article.aggregate([
       { $group: { _id: null, total: { $sum: '$readingTime' } } }
     ]);
-
     // Get recent activity (last 7 days)
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    
     const recentArticles = await Article.countDocuments({
       publishedAt: { $gte: sevenDaysAgo }
     });
-
     // Get tag popularity
     const tagStats = await Article.aggregate([
       { $unwind: '$tags' },
@@ -95,7 +87,6 @@ export async function GET(request: NextRequest) {
       { $sort: { count: -1 } },
       { $limit: 20 }
     ]);
-
     // Format category statistics with proper defaults
     const formattedCategoryStats = categoryStats.map(stat => ({
       category: stat._id,
@@ -105,7 +96,6 @@ export async function GET(request: NextRequest) {
       latestArticle: stat.latestArticle,
       percentage: ((stat.count / totalArticles) * 100).toFixed(1)
     }));
-
     // Ensure all main categories are represented
     const allCategories = ['technology', 'business', 'health', 'lifestyle', 'finance', 'science', 'environment'];
     const completeCategories = allCategories.map(category => {
@@ -119,7 +109,6 @@ export async function GET(request: NextRequest) {
         percentage: '0.0'
       };
     });
-
     const response = {
       overview: {
         totalArticles,
@@ -158,10 +147,8 @@ export async function GET(request: NextRequest) {
       recentEvents: getRecentEvents(5), // Include recent activity
       cached: false
     };
-
     // Update cache with fresh data
     updateStatsCache(response);
-
     return NextResponse.json(response);
   } catch (error) {
     console.error('Error fetching platform statistics:', error);

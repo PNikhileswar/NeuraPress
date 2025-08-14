@@ -1,32 +1,53 @@
-'use client';
-
+﻿'use client';
 import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
-
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
+    // Check for authentication errors
+    const authError = searchParams.get('error');
+    if (authError) {
+      setError(authError);
+      console.error('Auth error:', authError);
+    }
     // Check if user is already signed in
     const checkSession = async () => {
-      const session = await getSession();
-      if (session) {
-        router.push('/');
-      } else {
+      try {
+        const session = await getSession();
+        if (session) {
+          router.push('/');
+        } else {
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Session check error:', err);
         setLoading(false);
       }
     };
-
     checkSession();
-  }, [router]);
-
-  const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: '/' });
+  }, [router, searchParams]);
+  const handleGoogleSignIn = async () => {
+    try {
+      setError(null);
+      const result = await signIn('google', { 
+        callbackUrl: '/',
+        redirect: false 
+      });
+      if (result?.error) {
+        setError(result.error);
+      } else if (result?.ok) {
+        router.push('/');
+      }
+    } catch (err) {
+      console.error('Sign-in error:', err);
+      setError('An unexpected error occurred');
+    }
   };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -34,7 +55,6 @@ export default function LoginPage() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8">
@@ -43,9 +63,8 @@ export default function LoginPage() {
             <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">TW</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">TrendWise</span>
+            <span className="text-2xl font-bold text-gray-900">NeuraPress</span>
           </Link>
-          
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back
           </h2>
@@ -53,8 +72,19 @@ export default function LoginPage() {
             Sign in to your account to comment on articles and save your favorites
           </p>
         </div>
-
         <div className="space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-red-800 text-sm">
+                  Authentication error: {error}
+                </p>
+              </div>
+            </div>
+          )}
           <button
             onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-700 hover:bg-gray-50 transition-colors font-medium"
@@ -79,7 +109,6 @@ export default function LoginPage() {
             </svg>
             Continue with Google
           </button>
-
           <div className="text-center">
             <p className="text-sm text-gray-600">
               By signing in, you agree to our{' '}
@@ -93,16 +122,22 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-
         <div className="text-center">
           <Link
             href="/"
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
-            ← Back to Home
+            â† Back to Home
           </Link>
         </div>
       </div>
     </div>
+  );
+}
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

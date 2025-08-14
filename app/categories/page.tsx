@@ -1,17 +1,13 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
-// Update the import path if the file is located elsewhere, for example:
-import DynamicCategoriesGrid from '../../components/DynamicCategoriesGrid';
-// Or create the file at src/components/DynamicCategoriesGrid.tsx if it does not exist.
-
+import DynamicCategoriesGrid from '@/components/features/DynamicCategoriesGrid';
 export const metadata: Metadata = {
-  title: 'Categories - TrendWise',
-  description: 'Explore all article categories on TrendWise with real-time article counts.',
+  title: 'Categories - NeuraPress',
+  description: 'Explore all article categories on NeuraPress with real-time article counts.',
 };
-
 export default function CategoriesPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -24,7 +20,6 @@ export default function CategoriesPage() {
           </p>
         </div>
       </section>
-
       {/* Categories Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -38,12 +33,10 @@ export default function CategoriesPage() {
                 as new content is added to the platform.
               </p>
             </div>
-
             <DynamicCategoriesGrid />
           </div>
         </div>
       </section>
-
       {/* Features Section */}
       <section className="bg-white py-16">
         <div className="container mx-auto px-4">
@@ -55,7 +48,6 @@ export default function CategoriesPage() {
               Organized content makes it easier to find exactly what you're looking for
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -68,7 +60,6 @@ export default function CategoriesPage() {
                 Find articles tailored to your specific interests and expertise
               </p>
             </div>
-
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +71,6 @@ export default function CategoriesPage() {
                 Stay updated with the latest trends in each category
               </p>
             </div>
-
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +85,6 @@ export default function CategoriesPage() {
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="container mx-auto px-4 text-center">

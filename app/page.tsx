@@ -1,51 +1,45 @@
-import { Metadata } from 'next';
-import ArticleGrid from '@/components/ArticleGrid';
-import Hero from '@/components/Hero';
-import FeaturedArticles from '@/components/FeaturedArticles';
-import SearchBar from '@/components/SearchBar';
-import StructuredData from '@/components/StructuredData';
-import StatsWidget from '@/components/StatsWidget';
-
+﻿import { Metadata } from 'next';
+import ArticleGrid from '@/components/features/ArticleGrid';
+import Hero from '@/components/features/Hero';
+import FeaturedArticles from '@/components/features/FeaturedArticles';
+import SearchBar from '@/components/layout/SearchBar';
+import StructuredData from '@/components/ui/StructuredData';
 export const metadata: Metadata = {
-  title: 'TrendWise - AI-Powered Content & Trending Topics',
-  description: 'Discover AI-generated articles and trending topics. Search through comprehensive content on technology, business, health, and lifestyle.',
-  keywords: ['AI content', 'trending topics', 'technology articles', 'business insights', 'search articles'],
+  title: 'NeuraPress - AI-Powered Content & Personal Library',
+  description: 'Discover AI-generated articles and save them to your personal bookmarks. Search through comprehensive content on technology, business, health, and lifestyle.',
+  keywords: ['AI content', 'bookmarks', 'technology articles', 'business insights', 'search articles'],
   openGraph: {
-    title: 'TrendWise - AI-Powered Content Platform',
-    description: 'Discover AI-generated articles and trending topics across multiple categories',
+    title: 'NeuraPress - AI-Powered Content Platform',
+    description: 'Discover AI-generated articles and save them to your personal bookmarks across multiple categories',
     type: 'website',
-    siteName: 'TrendWise',
+    siteName: 'NeuraPress',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TrendWise - AI-Powered Content Platform',
-    description: 'Discover AI-generated articles and trending topics',
+    title: 'NeuraPress - AI-Powered Content Platform',
+    description: 'Discover AI-generated articles and save them to your personal bookmarks',
   },
   alternates: {
     canonical: '/',
   },
 };
-
 export default async function HomePage({
   searchParams,
 }: {
   searchParams: { search?: string; category?: string; page?: string };
 }) {
   const currentUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}`;
-  
   return (
-    <div className="min-h-screen">
+    <div>
       <StructuredData 
         type="WebSite" 
         data={{
-          name: 'TrendWise',
-          description: 'AI-powered content platform for trending topics and insights',
+          name: 'NeuraPress',
+          description: 'AI-powered content platform with personal bookmarking system',
           url: currentUrl,
         }} 
       />
-      
       <Hero />
-      
       <div className="container mx-auto px-4 py-8">
         {/* Enhanced Search Section */}
         <section className="mb-12">
@@ -58,7 +52,6 @@ export default async function HomePage({
             </p>
           </div>
           <SearchBar initialSearch={searchParams.search} />
-          
           {/* Quick Search Suggestions */}
           {!searchParams.search && (
             <div className="mt-6 text-center">
@@ -77,14 +70,7 @@ export default async function HomePage({
             </div>
           )}
         </section>
-
         <FeaturedArticles />
-        
-        {/* Live Stats Widget */}
-        <section className="mt-12">
-          <StatsWidget className="mb-8" />
-        </section>
-        
         <section id="latest-articles" className="mt-12">
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -98,17 +84,16 @@ export default async function HomePage({
                 }
               </p>
             </div>
-            
             {!searchParams.search && (
               <div className="hidden sm:flex items-center gap-4">
                 <a 
-                  href="/trending" 
+                  href="/bookmarks" 
                   className="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center gap-1"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                   </svg>
-                  View Trending Topics
+                  My Bookmarks
                 </a>
                 <a 
                   href="/categories" 
@@ -119,39 +104,37 @@ export default async function HomePage({
               </div>
             )}
           </div>
-          
           <ArticleGrid 
             searchParams={searchParams}
           />
         </section>
-        
         {/* Information Section for No Results */}
         <section className="mt-16 bg-gray-50 rounded-xl p-8">
           <div className="text-center max-w-3xl mx-auto">
             <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Looking for New Content?
+              Looking for Something to Read?
             </h3>
             <p className="text-gray-600 mb-6">
-              If you can't find what you're looking for, check out our trending topics page where you can discover new content suggestions and generate fresh articles using AI.
+              Check out your saved articles or explore different categories to find content that interests you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/trending"
+                href="/bookmarks"
                 className="inline-flex items-center justify-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                 </svg>
-                Explore Trending Topics
+                My Bookmarks
               </a>
               <a
-                href="/admin"
+                href="/categories"
                 className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-                Generate New Article
+                Browse Categories
               </a>
             </div>
           </div>

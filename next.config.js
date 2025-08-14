@@ -1,14 +1,18 @@
-/** @type {import('next').NextConfig} */
+﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'images.unsplash.com', 
-      'via.placeholder.com', 
-      'lh3.googleusercontent.com',
-      'source.unsplash.com',
-      'picsum.photos',
-    ],
     remotePatterns: [
+      // Allow all HTTPS images - universal approach
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      // Allow HTTP for specific safe domains only
+      {
+        protocol: 'http',
+        hostname: 'via.placeholder.com',
+      },
+      // Keep existing patterns for compatibility
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
@@ -17,19 +21,26 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'source.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
+        hostname: 'lh3.googleusercontent.com',
         port: '',
         pathname: '/**',
       },
     ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Referrer-Policy',
+            value: 'no-referrer-when-downgrade',
+          },
+        ],
+      },
+    ];
   },
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -40,5 +51,4 @@ const nextConfig = {
     MONGODB_URI: process.env.MONGODB_URI,
   },
 }
-
 module.exports = nextConfig

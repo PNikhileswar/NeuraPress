@@ -1,13 +1,10 @@
-import { NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Article from '@/lib/models/Article';
-
+﻿import { NextResponse } from 'next/server';
+import connectDB from '@/lib/database/mongodb';
+import Article from '@/lib/database/models/Article';
 export async function GET() {
   try {
     await connectDB();
-    
     const articles = await Article.find({}).select('title ogImage category').limit(20);
-    
     // Create an HTML page to test image loading
     const html = `
     <!DOCTYPE html>
@@ -27,7 +24,7 @@ export async function GET() {
         </style>
       </head>
       <body>
-        <h1>TrendWise Image Loading Test</h1>
+        <h1>NeuraPress Image Loading Test</h1>
         <p>Testing ${articles.length} article images...</p>
         <div class="image-grid">
           ${articles.map(article => `
@@ -35,8 +32,8 @@ export async function GET() {
               <img 
                 src="${article.ogImage}" 
                 alt="${article.title}"
-                onload="this.nextElementSibling.innerHTML = '<span class=\\"status loaded\\">✓ Loaded</span>'"
-                onerror="this.nextElementSibling.innerHTML = '<span class=\\"status error\\">✗ Failed</span>'"
+                onload="this.nextElementSibling.innerHTML = '<span class=\\"status loaded\\">âœ“ Loaded</span>'"
+                onerror="this.nextElementSibling.innerHTML = '<span class=\\"status error\\">âœ— Failed</span>'"
               />
               <div>Loading...</div>
               <h3>${article.title}</h3>
@@ -50,7 +47,6 @@ export async function GET() {
             const loadedImages = document.querySelectorAll('.loaded').length;
             const failedImages = document.querySelectorAll('.error').length;
             const totalImages = ${articles.length};
-            
             document.querySelector('p').innerHTML = 
               \`Testing \${totalImages} article images... 
               <strong style="color: green;">\${loadedImages} loaded</strong>, 
@@ -60,7 +56,6 @@ export async function GET() {
       </body>
     </html>
     `;
-    
     return new NextResponse(html, {
       headers: { 'Content-Type': 'text/html' },
     });

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import ArticleGrid from '@/components/ArticleGrid';
-import SearchBar from '@/components/SearchBar';
+import ArticleGrid from '@/components/features/ArticleGrid';
+import SearchBar from '@/components/layout/SearchBar';
 
 const validCategories = ['technology', 'business', 'health', 'lifestyle'];
 
@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
   
   return {
-    title: `${categoryName} Articles - TrendWise`,
-    description: `Discover the latest ${category} articles and trends on TrendWise.`,
+    title: `${categoryName} Articles - NeuraPress`,
+    description: `Discover the latest ${category} articles and trends on NeuraPress.`,
   };
 }
 

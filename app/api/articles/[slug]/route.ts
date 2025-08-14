@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Article from '@/lib/models/Article';
-import { invalidateStatsCache, notifyStatsUpdate } from '@/lib/stats-cache';
+import connectDB from '@/lib/database/mongodb';
+import Article from '@/lib/database/models/Article';
+import { invalidateStatsCache, notifyStatsUpdate } from '@/lib/utils/stats-cache';
 
 // GET /api/articles/[slug] - Get single article by slug
 export async function GET(

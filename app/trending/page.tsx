@@ -1,12 +1,10 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
-import { formatDate } from '@/lib/utils';
-
+import { formatDate } from '@/lib/utils/utils';
 export const metadata: Metadata = {
-  title: 'Trending Topics - TrendWise',
+  title: 'Trending Topics - NeuraPress',
   description: 'Discover trending topics that could become new articles. Generate AI-powered content from current trends.',
 };
-
 interface TrendingTopic {
   topic: string;
   category: string;
@@ -14,19 +12,15 @@ interface TrendingTopic {
   popularity: number;
   source: 'google' | 'twitter';
 }
-
 async function getTrendingTopics() {
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
-  
   try {
     const response = await fetch(`${baseUrl}/api/trending`, {
       cache: 'no-store',
     });
-
     if (!response.ok) {
       throw new Error('Failed to fetch trending topics');
     }
-
     const topics = await response.json();
     return Array.isArray(topics) ? topics : [];
   } catch (error) {
@@ -34,12 +28,10 @@ async function getTrendingTopics() {
     return [];
   }
 }
-
 export default async function TrendingPage() {
   const topics = await getTrendingTopics();
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
         <div className="container mx-auto px-4">
@@ -52,7 +44,7 @@ export default async function TrendingPage() {
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6">
               <p className="text-sm text-purple-100">
-                💡 <strong>How it works:</strong> These are trending topics from Google Trends and social media that our AI can turn into comprehensive articles for your blog.
+                ðŸ’¡ <strong>How it works:</strong> These are trending topics from Google Trends and social media that our AI can turn into comprehensive articles for your blog.
               </p>
             </div>
             <Link
@@ -70,7 +62,6 @@ export default async function TrendingPage() {
           </div>
         </div>
       </section>
-
       {/* Trending Topics Grid */}
       <section className="container mx-auto px-4 py-16">
         <div className="mb-8">
@@ -93,7 +84,6 @@ export default async function TrendingPage() {
             {topics.length} trending topic suggestions available for article generation
           </p>
         </div>
-
         {topics.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {topics.map((topic: TrendingTopic, index: number) => (
@@ -101,11 +91,12 @@ export default async function TrendingPage() {
                 key={index}
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-100 hover:border-blue-200"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                {/* Header with category and popularity */}
+                <div className="flex items-start justify-between mb-4">
+                  <span className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
                     {topic.category}
                   </span>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-1 ml-3">
                     <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
@@ -114,35 +105,36 @@ export default async function TrendingPage() {
                     </span>
                   </div>
                 </div>
-
                 <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                   {topic.topic}
                 </h3>
-
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  <strong>Keywords:</strong> {topic.keywords.slice(0, 3).join(', ')}
-                  <br />
-                  <strong>Trending source:</strong> {topic.source}
-                </p>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                  <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="space-y-2 mb-4">
+                  <p className="text-gray-600 text-sm">
+                    <strong>Keywords:</strong> {topic.keywords.slice(0, 3).join(', ')}
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    <strong>Source:</strong> {topic.source === 'google' ? 'Google Trends' : 'Social Media'}
+                  </p>
+                </div>
+                {/* Popularity metrics and status */}
+                <div className="flex items-center justify-between mb-4 py-3 px-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
-                    {topic.popularity.toLocaleString()} searches
-                  </span>
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                    Ready to Generate
+                    <span className="font-medium">{topic.popularity.toLocaleString()}</span>
+                    <span className="text-gray-500">searches</span>
+                  </div>
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                    âœ¨ Ready to Generate
                   </span>
                 </div>
-
                 <div className="flex gap-2">
                   <Link
                     href={`/admin?topic=${encodeURIComponent(topic.topic)}&category=${topic.category}`}
                     className="flex-1 text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                   >
-                    🤖 Generate Article
+                    ðŸ¤– Generate Article
                   </Link>
                   <Link
                     href={`/category/${topic.category.toLowerCase()}`}
@@ -176,14 +168,13 @@ export default async function TrendingPage() {
           </div>
         )}
       </section>
-
       {/* CTA Section */}
       <section className="bg-gray-900 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Want to Create Content?</h2>
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
             Our AI can generate high-quality articles based on trending topics. 
-            Join thousands of content creators using TrendWise.
+            Join thousands of content creators using NeuraPress.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

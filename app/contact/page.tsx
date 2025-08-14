@@ -1,13 +1,11 @@
-import { Metadata } from 'next';
-
+﻿import { Metadata } from 'next';
 export const metadata: Metadata = {
-  title: 'Contact Us - TrendWise',
-  description: 'Get in touch with the TrendWise team. We\'d love to hear from you.',
+  title: 'Contact Us - NeuraPress',
+  description: 'Get in touch with the NeuraPress team. We\'d love to hear from you.',
 };
-
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-gray-900 to-gray-700 text-white py-20">
         <div className="container mx-auto px-4">
@@ -21,7 +19,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
       {/* Contact Form Section */}
       <section className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
@@ -30,10 +27,9 @@ export default function ContactPage() {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Get in Touch</h2>
               <p className="text-gray-600 mb-8">
-                Have questions about TrendWise? Want to contribute content? Or just want to say hello? 
+                Have questions about NeuraPress? Want to contribute content? Or just want to say hello? 
                 We're here to help and would love to hear from you.
               </p>
-
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
@@ -45,10 +41,9 @@ export default function ContactPage() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Email</h3>
-                    <p className="text-gray-600">hello@trendwise.com</p>
+                    <p className="text-gray-600">nikhileswarpalivela@gmail.com</p>
                   </div>
                 </div>
-
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -59,15 +54,14 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Office</h3>
+                    <h3 className="text-lg font-medium text-gray-900">Developer</h3>
                     <p className="text-gray-600">
-                      TrendWise HQ<br />
-                      123 Innovation Street<br />
-                      Tech City, TC 12345
+                      PNikhileswar<br />
+                      Software Developer<br />
+                      Internship Project
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -83,7 +77,6 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-
             {/* Contact Form */}
             <div className="bg-white rounded-lg shadow-lg p-8">
               <form className="space-y-6">
@@ -99,7 +92,6 @@ export default function ContactPage() {
                     placeholder="Your full name"
                   />
                 </div>
-
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
@@ -112,7 +104,6 @@ export default function ContactPage() {
                     placeholder="your@email.com"
                   />
                 </div>
-
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
                     Subject
@@ -125,7 +116,6 @@ export default function ContactPage() {
                     placeholder="What's this about?"
                   />
                 </div>
-
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                     Message
@@ -138,7 +128,6 @@ export default function ContactPage() {
                     placeholder="Tell us more about your inquiry..."
                   ></textarea>
                 </div>
-
                 <button
                   type="submit"
                   className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"

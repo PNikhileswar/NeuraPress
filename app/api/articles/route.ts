@@ -1,24 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Article from '@/lib/models/Article';
-import { generateArticleContent } from '@/lib/openai';
-import { createSlug } from '@/lib/utils';
-import { invalidateStatsCache, notifyStatsUpdate } from '@/lib/stats-cache';
-
+﻿import { NextRequest, NextResponse } from 'next/server';
+import connectDB from '@/lib/database/mongodb';
+import Article from '@/lib/database/models/Article';
+import { generateArticleContent } from '@/lib/services/openai';
+import { createSlug } from '@/lib/utils/utils';
+import { invalidateStatsCache, notifyStatsUpdate } from '@/lib/utils/stats-cache';
 // GET /api/articles - Get all articles with pagination
 export async function GET(request: NextRequest) {
   try {
     await connectDB();
-
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const category = searchParams.get('category');
     const search = searchParams.get('search');
     const featured = searchParams.get('featured');
-
     const skip = (page - 1) * limit;
-
     // Build query
     const query: any = {};
     if (category) query.category = category;
@@ -30,16 +26,13 @@ export async function GET(request: NextRequest) {
         { tags: { $in: [new RegExp(search, 'i')] } },
       ];
     }
-
     const articles = await Article
       .find(query)
       .sort({ publishedAt: -1 })
       .skip(skip)
       .limit(limit)
       .select('-content'); // Exclude full content for list view
-
     const total = await Article.countDocuments(query);
-
     return NextResponse.json({
       articles,
       pagination: {
@@ -57,24 +50,19 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
 // POST /api/articles - Create new article
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
-
     const body = await request.json();
     const { topic, keywords, category, autoGenerate = true } = body;
-
     if (!topic || !category) {
       return NextResponse.json(
         { error: 'Topic and category are required' },
         { status: 400 }
       );
     }
-
     let articleData;
-
     if (autoGenerate) {
       // Generate content using AI
       const generatedContent = await generateArticleContent({
@@ -82,13 +70,13 @@ export async function POST(request: NextRequest) {
         keywords: keywords || [],
         category,
       });
-
       articleData = {
         ...generatedContent,
         slug: createSlug(generatedContent.title),
         category,
         featured: false,
-        media: {
+        // Keep the generated media instead of overriding with empty arrays
+        media: generatedContent.media || {
           images: [],
           videos: [],
           tweets: [],
@@ -97,14 +85,12 @@ export async function POST(request: NextRequest) {
     } else {
       // Manual content creation
       const { title, content, metaDescription, tags = [] } = body;
-      
       if (!title || !content) {
         return NextResponse.json(
           { error: 'Title and content are required for manual creation' },
           { status: 400 }
         );
       }
-
       articleData = {
         title,
         content,
@@ -128,10 +114,8 @@ export async function POST(request: NextRequest) {
         },
       };
     }
-
     const article = new Article(articleData);
     await article.save();
-
     // Invalidate stats cache and notify of the update
     const updateEvent = {
       type: 'article_created' as const,
@@ -139,12 +123,9 @@ export async function POST(request: NextRequest) {
       category: article.category,
       timestamp: new Date()
     };
-    
     invalidateStatsCache(updateEvent);
     notifyStatsUpdate(updateEvent);
-
-    console.log(`📝 Article created: "${article.title}" in ${article.category} category`);
-
+    console.log(`ðŸ“ Article created: "${article.title}" in ${article.category} category`);
     return NextResponse.json(article, { status: 201 });
   } catch (error) {
     console.error('Error creating article:', error);

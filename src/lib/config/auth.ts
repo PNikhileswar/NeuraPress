@@ -1,0 +1,121 @@
+﻿import { NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true, // This prevents OAuthAccountNotLinked error
+    }),
+  ],
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      // Allow all sign-ins - this prevents OAuthAccountNotLinked errors
+      return true;
+    },
+    async jwt({ token, user, account, profile, trigger, session }) {
+      // Handle session update triggers (for manual refresh)
+      if (trigger === 'update' && session) {
+        // When session.update() is called, merge the new data
+        if (session.isAdmin !== undefined) {
+          token.isAdmin = session.isAdmin;
+        }
+        if (session.forceRefresh) {
+          // Force refresh from database
+          try {
+            const { MongoClient } = require('mongodb');
+            const client = new MongoClient(process.env.MONGODB_URI!);
+            await client.connect();
+            const db = client.db('neurapress');
+            const customUsersCollection = db.collection('app_users');
+            const currentUser = await customUsersCollection.findOne({ email: token.email });
+            if (currentUser) {
+              token.isAdmin = currentUser.isAdmin || false;
+              token.name = currentUser.name;
+              token.picture = currentUser.image;
+              token.refreshedAt = Date.now(); // Add timestamp
+            }
+            await client.close();
+          } catch (error) {
+            console.error('Error refreshing token from database:', error);
+          }
+        }
+        return token;
+      }
+      // Persist the OAuth access_token and/or the user id to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        // Clean up the Google image URL to remove size restrictions
+        let imageUrl = user.image;
+        if (imageUrl && imageUrl.includes('googleusercontent.com')) {
+          // Remove size parameter from Google image URL
+          imageUrl = imageUrl.replace(/=s\d+-c$/, '');
+        }
+        token.picture = imageUrl;
+        // Check if this is the first user by checking our custom collection
+        try {
+          const { MongoClient } = require('mongodb');
+          const client = new MongoClient(process.env.MONGODB_URI!);
+          await client.connect();
+          const db = client.db('neurapress');
+          const customUsersCollection = db.collection('app_users');
+          // Check if user already exists in our custom collection
+          let existingUser = await customUsersCollection.findOne({ email: user.email });
+          if (!existingUser) {
+            // Check if this is the first user
+            const userCount = await customUsersCollection.countDocuments();
+            const isFirstUser = userCount === 0;
+            // Create user in our custom collection
+            await customUsersCollection.insertOne({
+              email: user.email,
+              name: user.name,
+              image: imageUrl, // Use cleaned image URL
+              isAdmin: isFirstUser,
+              createdAt: new Date()
+            });
+            token.isAdmin = isFirstUser;
+          } else {
+            token.isAdmin = existingUser.isAdmin || false;
+          }
+          await client.close();
+        } catch (error) {
+          console.error('Error in JWT callback:', error);
+          token.isAdmin = false;
+        }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Send properties to the client (reduced logging)
+      if (token && session.user) {
+        (session.user as any).id = token.id;
+        (session.user as any).isAdmin = token.isAdmin || false;
+        // Ensure user image is included in the session
+        if (token.picture) {
+          session.user.image = token.picture as string;
+        }
+        if (token.name) {
+          session.user.name = token.name as string;
+        }
+        if (token.email) {
+          session.user.email = token.email as string;
+        }
+      }
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/login',
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt', // Use JWT instead of database sessions
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  debug: false, // Disable debug logs to reduce console spam
+};

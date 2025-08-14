@@ -1,8 +1,7 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-
 interface Article {
   _id: string;
   title: string;
@@ -16,18 +15,15 @@ interface Article {
   ogImage?: string;
   featured: boolean;
 }
-
 async function getFeaturedArticles(): Promise<Article[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
     const response = await fetch(`${baseUrl}/api/articles?featured=true&limit=50`, {
       next: { revalidate: 300 } // Cache for 5 minutes
     });
-
     if (!response.ok) {
       throw new Error('Failed to fetch featured articles');
     }
-
     const data = await response.json();
     return data.articles || [];
   } catch (error) {
@@ -35,13 +31,11 @@ async function getFeaturedArticles(): Promise<Article[]> {
     return [];
   }
 }
-
 export const metadata: Metadata = {
-  title: 'Featured Articles | TrendWise',
+  title: 'Featured Articles | NeuraPress',
   description: 'Discover our most popular and trending articles across technology, health, business, and lifestyle topics.',
-  keywords: ['featured articles', 'trending topics', 'popular content', 'TrendWise'],
+  keywords: ['featured articles', 'trending topics', 'popular content', 'NeuraPress'],
 };
-
 function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -60,7 +54,6 @@ function ArticleCard({ article }: { article: Article }) {
           </div>
         </div>
       )}
-      
       <div className="p-6">
         <div className="flex items-center gap-4 mb-3">
           <span className="inline-block bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full capitalize">
@@ -70,17 +63,14 @@ function ArticleCard({ article }: { article: Article }) {
             {article.readingTime} min read
           </span>
         </div>
-        
         <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
           <Link href={`/article/${article.slug}`}>
             {article.title}
           </Link>
         </h2>
-        
         <p className="text-gray-600 mb-4 line-clamp-3">
           {article.excerpt}
         </p>
-        
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-2">
             {article.tags.slice(0, 3).map((tag) => (
@@ -92,22 +82,19 @@ function ArticleCard({ article }: { article: Article }) {
               </span>
             ))}
           </div>
-          
           <Link
             href={`/article/${article.slug}`}
             className="text-blue-600 hover:text-blue-800 font-medium text-sm"
           >
-            Read More →
+            Read More â†’
           </Link>
         </div>
       </div>
     </article>
   );
 }
-
 export default async function FeaturedArticlesPage() {
   const featuredArticles = await getFeaturedArticles();
-
   if (!featuredArticles || featuredArticles.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -124,7 +111,6 @@ export default async function FeaturedArticlesPage() {
       </div>
     );
   }
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
@@ -135,7 +121,6 @@ export default async function FeaturedArticlesPage() {
           health, business, and lifestyle.
         </p>
       </div>
-
       {/* Breadcrumb */}
       <nav className="flex mb-8" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">
@@ -157,7 +142,6 @@ export default async function FeaturedArticlesPage() {
           </li>
         </ol>
       </nav>
-
       {/* Stats */}
       <div className="bg-blue-50 rounded-lg p-6 mb-8">
         <div className="text-center">
@@ -169,21 +153,19 @@ export default async function FeaturedArticlesPage() {
           </p>
         </div>
       </div>
-
       {/* Articles Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {featuredArticles.map((article) => (
           <ArticleCard key={article._id} article={article} />
         ))}
       </div>
-
       {/* Back to Home */}
       <div className="text-center mt-12">
         <Link
           href="/"
           className="inline-block bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
         >
-          ← Back to Home
+          â† Back to Home
         </Link>
       </div>
     </div>

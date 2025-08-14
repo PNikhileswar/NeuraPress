@@ -2,12 +2,15 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { formatDate } from '@/lib/utils';
-import CommentSection from '@/components/CommentSection';
-import ShareButtons from '@/components/ShareButtons';
-import RelatedArticles from '@/components/RelatedArticles';
-import MediaSection from '@/components/MediaSection';
+import rehypeRaw from 'rehype-raw';
+import { formatDate } from '@/lib/utils/utils';
+import CommentSection from '@/components/features/CommentSection';
+import ShareButtons from '@/components/ui/ShareButtons';
+import RelatedArticles from '@/components/features/RelatedArticles';
+import MediaSection from '@/components/features/MediaSection';
+import BookmarkButton from '@/components/ui/BookmarkButton';
 
 interface Article {
   _id: string;
@@ -29,7 +32,7 @@ interface Article {
       thumbnailUrl?: string;
       title?: string;
       description?: string;
-      source: 'unsplash' | 'pexels' | 'youtube' | 'vimeo';
+      source: 'unsplash' | 'pexels' | 'vimeo';
       type: 'image' | 'video';
       tags: string[];
       relevanceScore: number;
@@ -48,7 +51,7 @@ interface Article {
       thumbnailUrl?: string;
       title?: string;
       description?: string;
-      source: 'unsplash' | 'pexels' | 'youtube' | 'vimeo';
+      source: 'unsplash' | 'pexels' | 'vimeo';
       type: 'image' | 'video';
       tags: string[];
       relevanceScore: number;
@@ -162,7 +165,7 @@ export default async function ArticlePage({
     },
     publisher: {
       '@type': 'Organization',
-      name: 'TrendWise',
+      name: 'NeuraPress',
       logo: {
         '@type': 'ImageObject',
         url: `${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/logo.png`,
@@ -246,18 +249,47 @@ export default async function ArticlePage({
                 fill
                 className="object-cover"
                 priority
+                unoptimized={true}
               />
             </div>
           )}
 
-          {/* Share Buttons */}
-          <ShareButtons article={article} />
+          {/* Share Buttons and Bookmark */}
+          <div className="flex items-center justify-between">
+            <ShareButtons article={article} />
+            <BookmarkButton
+              articleId={article._id}
+              articleTitle={article.title}
+              articleSlug={article.slug}
+              articleExcerpt={article.excerpt}
+              articleCategory={article.category}
+              articleImage={article.ogImage}
+            />
+          </div>
         </header>
 
         {/* Content */}
         <div className="prose prose-lg max-w-none mb-12 bg-white rounded-lg p-8 shadow-sm">
           <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
             components={{
+              p: ({ node, children, ...props }) => {
+                // Check if p contains only img or has an iframe inside
+                const hasImg = node?.children?.length === 1 && 
+                  'tagName' in node.children[0] && 
+                  node.children[0].tagName === 'img';
+                
+                const hasBlockElement = node?.children?.some(
+                  child => 'tagName' in child && 
+                  (child.tagName === 'iframe' || child.tagName === 'div')
+                );
+                
+                if (hasImg || hasBlockElement) {
+                  // Return children directly without p wrapper to avoid nesting issues
+                  return <>{children}</>;
+                }
+                return <p {...props}>{children}</p>;
+              },
               img: ({ src, alt, ...props }) => (
                 <div className="my-8">
                   <Image
@@ -267,21 +299,43 @@ export default async function ArticlePage({
                     height={600}
                     className="rounded-xl shadow-lg w-full object-cover"
                     style={{ maxHeight: '500px' }}
+                    unoptimized={true}
                   />
                 </div>
               ),
+              iframe: ({ node, src, ...props }) => {
+                // Render iframes normally
+                return (
+                  <div className="my-8 aspect-video relative w-full overflow-hidden rounded-lg shadow-lg">
+                    <iframe
+                      src={src}
+                      {...props}
+                      className="absolute inset-0 w-full h-full border-0"
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                );
+              },
+              div: ({ className, children, ...props }) => {
+                // Handle video containers
+                if (className === 'video-container') {
+                  return (
+                    <div className="video-container my-8 aspect-video relative w-full overflow-hidden rounded-lg shadow-lg" {...props}>
+                      {children}
+                    </div>
+                  );
+                }
+                return <div className={className} {...props}>{children}</div>;
+              }
             }}
           >
             {article.content}
           </ReactMarkdown>
         </div>
 
-        {/* Rich Media Section */}
-        {article.media && (article.media.images.length > 0 || article.media.videos.length > 0 || article.media.tweets.length > 0) && (
-          <div className="mb-12">
-            <MediaSection media={article.media} title={article.title} />
-          </div>
-        )}
+        {/* Rich Media Section - Removed */}
 
         {/* Tags */}
         {article.tags.length > 0 && (
@@ -307,7 +361,17 @@ export default async function ArticlePage({
             <div className="text-sm text-gray-500">
               Last updated: {formatDate(new Date(article.updatedAt))}
             </div>
-            <ShareButtons article={article} compact />
+            <div className="flex items-center gap-4">
+              <BookmarkButton
+                articleId={article._id}
+                articleTitle={article.title}
+                articleSlug={article.slug}
+                articleExcerpt={article.excerpt}
+                articleCategory={article.category}
+                articleImage={article.ogImage}
+              />
+              <ShareButtons article={article} compact />
+            </div>
           </div>
         </footer>
 

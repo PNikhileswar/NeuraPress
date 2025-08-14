@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server';
-import { getAllTrendingTopics } from '@/lib/trending';
-
+﻿import { NextResponse } from 'next/server';
+import { getAllTrendingTopics } from '@/lib/utils/trending';
 // GET /api/trending - Get trending topics
 export async function GET() {
   try {

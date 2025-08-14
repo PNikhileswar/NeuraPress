@@ -52,31 +52,34 @@ export async function PUT(
     if (typeof featured === 'boolean') updateData.featured = featured;
     if (category) updateData.category = category;
 
-    const article = await Article.findOneAndUpdate(
-      { slug: params.slug },
-      updateData,
-      { new: true }
-    );
-
-    if (!article) {
+    // First find the article to ensure it exists
+    const existingArticle = await Article.findOne({ slug: params.slug });
+    if (!existingArticle) {
       return NextResponse.json(
         { error: 'Article not found' },
         { status: 404 }
       );
     }
 
+    // Update the article
+    const article = await Article.findOneAndUpdate(
+      { slug: params.slug },
+      updateData,
+      { new: true }
+    );
+
     // Invalidate stats cache and notify of the update
     const updateEvent = {
       type: 'article_updated' as const,
-      articleId: article._id.toString(),
-      category: article.category,
+      articleId: existingArticle._id.toString(),
+      category: article?.category || existingArticle.category,
       timestamp: new Date()
     };
     
     invalidateStatsCache(updateEvent);
     notifyStatsUpdate(updateEvent);
 
-    console.log(`✏️ Article updated: "${article.title}" in ${article.category} category`);
+    console.log(`✏️ Article updated: "${article?.title || existingArticle.title}" in ${article?.category || existingArticle.category} category`);
 
     return NextResponse.json(article);
   } catch (error) {
@@ -96,27 +99,31 @@ export async function DELETE(
   try {
     await connectDB();
 
-    const article = await Article.findOneAndDelete({ slug: params.slug });
+    // First find the article to get its data
+    const articleToDelete = await Article.findOne({ slug: params.slug });
 
-    if (!article) {
+    if (!articleToDelete) {
       return NextResponse.json(
         { error: 'Article not found' },
         { status: 404 }
       );
     }
 
+    // Now delete the article
+    await Article.deleteOne({ slug: params.slug });
+
     // Invalidate stats cache and notify of the deletion
     const deleteEvent = {
       type: 'article_deleted' as const,
-      articleId: article._id?.toString() || '',
-      category: article.category || '',
+      articleId: articleToDelete._id.toString(),
+      category: articleToDelete.category,
       timestamp: new Date()
     };
     
     invalidateStatsCache(deleteEvent);
     notifyStatsUpdate(deleteEvent);
 
-    console.log(`🗑️ Article deleted: "${article.title || 'Unknown'}" from ${article.category || 'Unknown'} category`);
+    console.log(`🗑️ Article deleted: "${articleToDelete.title}" from ${articleToDelete.category} category`);
 
     return NextResponse.json({ message: 'Article deleted successfully' });
   } catch (error) {

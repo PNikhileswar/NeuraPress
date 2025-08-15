@@ -3,6 +3,9 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/config/auth';
 import connectDB from '@/lib/database/mongodb';
 import User from '@/lib/database/models/User';
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
 // GET /api/user - Get current user details
 export async function GET(request: NextRequest) {
   try {

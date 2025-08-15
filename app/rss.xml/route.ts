@@ -1,16 +1,20 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
+import connectDB from '@/lib/database/mongodb';
+import Article from '@/lib/database/models/Article';
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://neura-press.vercel.app';
-  // Fetch recent articles for RSS feed
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://neurapress-rho-eight.vercel.app';
+  
   try {
-    const response = await fetch(`${baseUrl}/api/articles?limit=20`, {
-      cache: 'no-store',
-    });
-    let articles = [];
-    if (response.ok) {
-      const data = await response.json();
-      articles = data.articles || [];
-    }
+    // Direct database query instead of fetch to avoid circular dependency
+    await connectDB();
+    const articles = await Article.find({})
+      .sort({ publishedAt: -1 })
+      .limit(20)
+      .lean();
     const rssContent = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>

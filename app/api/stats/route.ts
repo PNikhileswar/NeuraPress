@@ -2,6 +2,9 @@
 import connectDB from '@/lib/database/mongodb';
 import Article from '@/lib/database/models/Article';
 import { getCachedStats, updateStatsCache, getRecentEvents } from '@/lib/utils/stats-cache';
+
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic';
 // GET /api/stats - Get dynamic platform statistics
 export async function GET(request: NextRequest) {
   try {

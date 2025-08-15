@@ -13,19 +13,26 @@ interface TrendingTopic {
   source: 'google' | 'twitter';
 }
 async function getTrendingTopics() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://neura-press.vercel.app';
+  // Return empty array during build or if trending service fails
+  if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV === 'preview') {
+    return [];
+  }
+  
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://neurapress-rho-eight.vercel.app';
   try {
     const response = await fetch(`${baseUrl}/api/trending`, {
       cache: 'no-store',
+      next: { revalidate: 300 } // 5 minutes
     });
     if (!response.ok) {
-      throw new Error('Failed to fetch trending topics');
+      console.log('Trending API not available, showing empty state');
+      return [];
     }
     const topics = await response.json();
     return Array.isArray(topics) ? topics : [];
   } catch (error) {
     console.error('Error fetching trending topics:', error);
-    return [];
+    return []; // Return empty array instead of throwing
   }
 }
 export default async function TrendingPage() {

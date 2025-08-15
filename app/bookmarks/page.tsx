@@ -81,7 +81,7 @@ export default function BookmarksPage() {
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
               <p className="text-sm text-blue-100">
-                ðŸ’¡ <strong>Tip:</strong> Click the bookmark icon on any article to save it here for easy access later.
+                \uD83D\uDCA1 <strong>Tip:</strong> Click the bookmark icon on any article to save it here for easy access later.
               </p>
             </div>
           </div>

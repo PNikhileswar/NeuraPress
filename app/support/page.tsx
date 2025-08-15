@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 export default function SupportPage() {
   const supportOptions = [
     {
-      icon: 'ðŸ“§',
+      icon: '\uD83D\uDD27',
       title: 'Email Support',
       description: 'Get help via email within 24 hours',
       action: 'nikhileswarpalivela@gmail.com',

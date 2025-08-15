@@ -153,9 +153,9 @@ export default function AdminArticleGenerationPage() {
                     <div className="flex-1">
                       <h3 className="font-medium text-gray-900 mb-1">{article.title}</h3>
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>ðŸ“‚ {article.category}</span>
-                        <span>ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}</span>
-                        {article.source && <span>ðŸ“° {article.source}</span>}
+                        <span>\uD83D\uDCC2 {article.category}</span>
+                        <span>\uD83D\uDD57 {new Date(article.publishedAt).toLocaleDateString()}</span>
+                        {article.source && <span>\uD83D\uDCF0 {article.source}</span>}
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">

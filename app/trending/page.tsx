@@ -44,7 +44,7 @@ export default async function TrendingPage() {
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6">
               <p className="text-sm text-purple-100">
-                ðŸ’¡ <strong>How it works:</strong> These are trending topics from Google Trends and social media that our AI can turn into comprehensive articles for your blog.
+                \uD83D\uDCA1 <strong>How it works:</strong> These are trending topics from Google Trends and social media that our AI can turn into comprehensive articles for your blog.
               </p>
             </div>
             <Link
@@ -126,7 +126,7 @@ export default async function TrendingPage() {
                     <span className="text-gray-500">searches</span>
                   </div>
                   <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                    âœ¨ Ready to Generate
+                    \uD83E\uDD16 Ready to Generate
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -134,7 +134,7 @@ export default async function TrendingPage() {
                     href={`/admin?topic=${encodeURIComponent(topic.topic)}&category=${topic.category}`}
                     className="flex-1 text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                   >
-                    ðŸ¤– Generate Article
+                    \uD83E\uDD16- Generate Article
                   </Link>
                   <Link
                     href={`/category/${topic.category.toLowerCase()}`}

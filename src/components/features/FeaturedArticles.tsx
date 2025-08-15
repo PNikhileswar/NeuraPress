@@ -86,7 +86,7 @@ function FeaturedArticleCard({ article, isLarge }: { article: Article; isLarge: 
         {/* Featured Badge */}
         <div className="absolute top-4 left-4">
           <span className="bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold">
-            â­ Featured
+            \u2B50 Featured
           </span>
         </div>
       </div>

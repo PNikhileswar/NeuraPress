@@ -11,7 +11,7 @@ export default function RSSPage() {
       <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="text-6xl mb-6">ðŸ“¡</div>
+            <div className="text-6xl mb-6">\uD83D\uDCE1</div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               RSS Feed
             </h1>
@@ -44,7 +44,7 @@ export default function RSSPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Subscribe to Our Feed</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="text-center">
-                <div className="text-4xl mb-4">ðŸ”—</div>
+                <div className="text-4xl mb-4">\uD83D\uDD17</div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Direct RSS Link</h3>
                 <p className="text-gray-600 mb-4 text-sm">
                   Copy this URL to your RSS reader
@@ -64,7 +64,7 @@ export default function RSSPage() {
                 </a>
               </div>
               <div className="text-center">
-                <div className="text-4xl mb-4">ðŸ“±</div>
+                <div className="text-4xl mb-4">\uD83D\uDCF1</div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Mobile & Desktop Apps</h3>
                 <p className="text-gray-600 mb-4 text-sm">
                   Use popular RSS readers to subscribe
@@ -121,17 +121,17 @@ export default function RSSPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Feed Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-2xl mb-2">ðŸ”„</div>
+                <div className="text-2xl mb-2">\uD83D\uDCC4</div>
                 <h3 className="font-semibold text-gray-800 mb-1">Update Frequency</h3>
                 <p className="text-gray-600 text-sm">Updates every hour</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl mb-2">ðŸ“„</div>
+                <div className="text-2xl mb-2">\uD83D\uDCC4</div>
                 <h3 className="font-semibold text-gray-800 mb-1">Content Type</h3>
                 <p className="text-gray-600 text-sm">Full article content</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl mb-2">ðŸ·ï¸</div>
+                <div className="text-2xl mb-2">\uD83C\uDFF7\uFE0F</div>
                 <h3 className="font-semibold text-gray-800 mb-1">Categories</h3>
                 <p className="text-gray-600 text-sm">All topics included</p>
               </div>

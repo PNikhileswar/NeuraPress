@@ -218,10 +218,10 @@ export default function AdminDashboard() {
     setDeleteConfirm({ show: false, article: null });
   };
   const tabs = [
-    { id: 'overview', name: 'Overview', icon: 'ðŸ“Š' },
-    { id: 'articles', name: 'Articles', icon: 'ðŸ“' },
-    { id: 'users', name: 'User Management', icon: 'ðŸ‘¥' },
-  ];
+  { id: 'overview', name: 'Overview', icon: '\uD83D\uDCCA' },
+  { id: 'articles', name: 'Articles', icon: '\uD83D\uDCC4' },  
+  { id: 'users', name: 'User Management', icon: '\uD83D\uDC65' },
+];
   return (
     <div className="bg-white rounded-lg shadow">
       {/* Tabs */}
@@ -446,7 +446,7 @@ export default function AdminDashboard() {
                                 : 'bg-gray-100 text-gray-800'
                             }`}
                           >
-                            {article.featured ? 'â­ Featured' : 'Not Featured'}
+                            {article.featured ? '/u2B50 Featured' : 'Not Featured'}
                           </button>
                         </td>
                         <td className="px-4 py-3">
@@ -551,7 +551,7 @@ export default function AdminDashboard() {
                               ? 'bg-green-100 text-green-800'
                               : 'bg-gray-100 text-gray-800'
                           }`}>
-                            {user.isAdmin ? 'ðŸ‘‘ Admin' : 'User'}
+                            {user.isAdmin ? '\uD83D\uDC51 Admin' : 'User'}
                           </span>
                         </td>
                         <td className="px-4 py-3">

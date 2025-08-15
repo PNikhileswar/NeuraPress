@@ -1,14 +1,6 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
 export async function GET(request: NextRequest) {
-  // Skip database operations during build time
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    return NextResponse.json({
-      message: 'Build time mode - database test skipped',
-      buildTime: true
-    });
-  }
-
   try {
     console.log('Testing MongoDB connection...');
     if (!process.env.MONGODB_URI) {

@@ -15,12 +15,6 @@ if (!global.mongoose) {
   global.mongoose = cached;
 }
 async function connectDB(): Promise<mongoose.Connection> {
-  // Skip database connection during build phase
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    console.log('Skipping MongoDB connection during build phase');
-    throw new Error('Database connection skipped during build');
-  }
-
   if (cached.conn) {
     return cached.conn;
   }

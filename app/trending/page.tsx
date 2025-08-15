@@ -13,7 +13,7 @@ interface TrendingTopic {
   source: 'google' | 'twitter';
 }
 async function getTrendingTopics() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://neura-press.vercel.app';
   try {
     const response = await fetch(`${baseUrl}/api/trending`, {
       cache: 'no-store',

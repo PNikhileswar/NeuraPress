@@ -17,7 +17,7 @@ interface Article {
 }
 async function getFeaturedArticles(): Promise<Article[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
+    const baseUrl = process.env.NEXTAUTH_URL || 'https://neura-press.vercel.app';
     const response = await fetch(`${baseUrl}/api/articles?featured=true&limit=50`, {
       next: { revalidate: 300 } // Cache for 5 minutes
     });

@@ -446,7 +446,7 @@ export default function AdminDashboard() {
                                 : 'bg-gray-100 text-gray-800'
                             }`}
                           >
-                            {article.featured ? '/u2B50 Featured' : 'Not Featured'}
+                            {article.featured ? '\u2B50 Featured' : 'Not Featured'}
                           </button>
                         </td>
                         <td className="px-4 py-3">

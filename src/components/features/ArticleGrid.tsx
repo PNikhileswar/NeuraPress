@@ -142,9 +142,9 @@ function ArticleCard({ article }: { article: Article }) {
           <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
             {article.category}
           </span>
-          <span>â€¢</span>
+          <span> •</span>
           <span>{formatDate(new Date(article.publishedAt))}</span>
-          <span>â€¢</span>
+          <span> •</span>
           <span>{article.readingTime} min read</span>
         </div>
         <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 hover:text-blue-600">
@@ -180,7 +180,7 @@ function ArticleCard({ article }: { article: Article }) {
               href={`/article/${article.slug}`}
               className="text-blue-600 hover:text-blue-800 font-medium text-sm"
             >
-              Read More â†’
+              Read More  ←’
             </Link>
           </div>
         </div>

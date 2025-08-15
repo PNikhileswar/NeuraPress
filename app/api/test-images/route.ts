@@ -43,8 +43,8 @@ export async function GET() {
               <img 
                 src="${article.ogImage}" 
                 alt="${article.title}"
-                onload="this.nextElementSibling.innerHTML = '<span class=\\"status loaded\\">âœ“ Loaded</span>'"
-                onerror="this.nextElementSibling.innerHTML = '<span class=\\"status error\\">âœ— Failed</span>'"
+                onload="this.nextElementSibling.innerHTML = '<span class=\\"status loaded\\"> ❌“ Loaded</span>'"
+                onerror="this.nextElementSibling.innerHTML = '<span class=\\"status error\\"> ❌— Failed</span>'"
               />
               <div>Loading...</div>
               <h3>${article.title}</h3>

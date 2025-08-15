@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
           publishedAt: recentArticle.publishedAt
         });
       } else {
-        console.log(`âœ… Topic available for generation: "${topic.topic}"`);
+        console.log(` ❌… Topic available for generation: "${topic.topic}"`);
         availableTopics.push(topic);
       }
     }
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
         continue;
       }
     }
-    console.log(`\nâœ… Generation completed!`);
+    console.log(`\n ❌… Generation completed!`);
     console.log(`   Successfully generated: ${generatedArticles.length} articles`);
     console.log(`   Skipped (recent articles): ${skippedTopics.length} topics`);
     if (errors.length > 0) {

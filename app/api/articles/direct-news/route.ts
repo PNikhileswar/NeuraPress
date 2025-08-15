@@ -141,11 +141,11 @@ export async function GET(request: NextRequest) {
       provider: 'NewsAPI.org (Real-time news)',
       date: new Date().toISOString().split('T')[0],
       benefits: [
-        'âœ… REAL current news from major outlets',
-        'âœ… Actual today\'s dates - no fake timestamps', 
-        'âœ… Different articles every time',
-        'âœ… Professional journalism quality',
-        'âœ… Proper source attribution'
+        ' ❌… REAL current news from major outlets',
+        ' ❌… Actual today\'s dates - no fake timestamps', 
+        ' ❌… Different articles every time',
+        ' ❌… Professional journalism quality',
+        ' ❌… Proper source attribution'
       ],
       setup: hasNewsAPI ? 'Ready to use!' : 'Get free API key from https://newsapi.org',
       usage: {

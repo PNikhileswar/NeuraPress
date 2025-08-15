@@ -128,7 +128,7 @@ export async function fetchAndProcessNewsArticles(options: {
           // Add articles with their category information
           const articlesWithCategory = substantialArticles.map(article => ({ article, category }));
           allArticles.push(...articlesWithCategory);
-          console.log(`âœ… Found ${substantialArticles.length} substantial articles in ${category}`);
+          console.log(` ❌… Found ${substantialArticles.length} substantial articles in ${category}`);
         } else {
           console.warn(`âš ï¸ No articles found for ${category}`);
         }
@@ -422,7 +422,7 @@ export async function saveProcessedArticles(articles: ProcessedArticle[]): Promi
       }
       const article = new Article(articleData);
       await article.save();
-      console.log(`âœ… Saved article: "${articleData.title}"`);
+      console.log(` ❌… Saved article: "${articleData.title}"`);
       results.saved++;
     } catch (error) {
       const errorMsg = `Failed to save "${articleData.title}": ${error instanceof Error ? error.message : 'Unknown error'}`;

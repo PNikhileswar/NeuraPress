@@ -217,7 +217,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
               Process real news articles directly from 80,000+ professional news sources
             </p>
             <div className="mt-2 text-xs text-gray-500">
-              \uD83D\uDD25 Breaking news â€¢ ðŸ“ˆ Real journalism â€¢ âš¡ Instant content
+              \uD83D\uDD25 Breaking news  • ðŸ“ˆ Real journalism  • š¡ Instant content
             </div>
           </div>
         </div>
@@ -419,7 +419,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
       {error && (
         <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-start">
-            <span className="text-red-500 mr-2">âŒ</span>
+            <span className="text-red-500 mr-2">Œ</span>
             <div>
               <h3 className="text-red-800 font-medium">Generation Failed</h3>
               <p className="text-red-600 text-sm mt-1">{error}</p>
@@ -467,7 +467,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                     </h5>
                     <div className="text-xs text-gray-500 flex items-center justify-between">
                       <span>
-                        ðŸ“‚ {article.category} â€¢ ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}
+                        ðŸ“‚ {article.category}  • ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}
                       </span>
                       {article.source && (
                         <span>ðŸ“° {article.source}</span>
@@ -480,7 +480,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                         rel="noopener noreferrer"
                         className="text-xs text-blue-600 hover:text-blue-800"
                       >
-                        View Original â†’
+                        View Original  ←’
                       </a>
                     )}
                   </div>

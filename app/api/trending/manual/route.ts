@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
         const article = new Article(articleData);
         await article.save();
         generatedArticle = article;
-        console.log(`âœ… Successfully generated article: ${generatedContent.title}`);
+        console.log(` ❌… Successfully generated article: ${generatedContent.title}`);
       } catch (error) {
         console.error('Error generating article for manual topic:', error);
         return NextResponse.json({

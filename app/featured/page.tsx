@@ -86,7 +86,7 @@ function ArticleCard({ article }: { article: Article }) {
             href={`/article/${article.slug}`}
             className="text-blue-600 hover:text-blue-800 font-medium text-sm"
           >
-            Read More â†’
+            Read More  ←’
           </Link>
         </div>
       </div>
@@ -165,7 +165,7 @@ export default async function FeaturedArticlesPage() {
           href="/"
           className="inline-block bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
         >
-          â† Back to Home
+           ← Back to Home
         </Link>
       </div>
     </div>

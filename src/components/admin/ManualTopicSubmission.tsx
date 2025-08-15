@@ -180,7 +180,7 @@ const ManualTopicSubmission: React.FC = () => {
                 </div>
               )}
               {result.warning && (
-                <p className="text-amber-600 text-sm mt-1">âš ï¸ {result.warning}</p>
+                <p className="text-amber-600 text-sm mt-1">š ï¸ {result.warning}</p>
               )}
             </div>
           )}
@@ -189,11 +189,11 @@ const ManualTopicSubmission: React.FC = () => {
       <div className="mt-8 bg-gray-50 rounded-lg p-4">
         <h3 className="text-lg font-medium text-gray-800 mb-2">How to Use</h3>
         <ul className="text-sm text-gray-600 space-y-1">
-          <li>â€¢ Enter breaking news topics or important events you want covered</li>
-          <li>â€¢ High priority topics will be featured and generated first</li>
-          <li>â€¢ System automatically checks for duplicate content</li>
-          <li>â€¢ Generated articles include relevant images and SEO optimization</li>
-          <li>â€¢ Articles are published immediately when generated</li>
+          <li> • Enter breaking news topics or important events you want covered</li>
+          <li> • High priority topics will be featured and generated first</li>
+          <li> • System automatically checks for duplicate content</li>
+          <li> • Generated articles include relevant images and SEO optimization</li>
+          <li> • Articles are published immediately when generated</li>
         </ul>
       </div>
     </div>

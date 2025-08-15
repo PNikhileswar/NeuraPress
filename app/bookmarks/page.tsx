@@ -187,7 +187,7 @@ export default function BookmarksPage() {
                         href={`/article/${bookmark.articleSlug}`}
                         className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                       >
-                        Read Article â†’
+                        Read Article  ←’
                       </Link>
                     </div>
                   </div>

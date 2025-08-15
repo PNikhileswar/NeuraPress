@@ -190,9 +190,43 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error('Error fetching platform statistics:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch statistics' },
-      { status: 500 }
-    );
+    console.error('MongoDB URI exists:', !!process.env.MONGODB_URI);
+    console.error('Error details:', error instanceof Error ? error.message : String(error));
+    
+    // Return empty stats instead of error to prevent UI breakage
+    return NextResponse.json({
+      overview: {
+        totalArticles: 0,
+        featuredArticles: 0,
+        totalReadingTime: 0,
+        avgReadingTime: 0,
+        recentArticles: 0,
+        lastUpdated: new Date()
+      },
+      categories: [],
+      media: {
+        totalImages: 0,
+        totalVideos: 0,
+        totalTweets: 0,
+        totalMediaItems: 0,
+        avgImagesPerArticle: 0,
+        avgVideosPerArticle: 0,
+        avgTweetsPerArticle: 0
+      },
+      tags: [],
+      performance: {
+        articlesThisWeek: 0,
+        avgArticlesPerDay: '0.0',
+        contentHealth: {
+          withImages: 0,
+          withVideos: 0,
+          withTweets: 0,
+          withOgImage: 0
+        }
+      },
+      recentEvents: [],
+      cached: false,
+      error: 'Database connection failed - check MongoDB Atlas IP whitelist'
+    });
   }
 }

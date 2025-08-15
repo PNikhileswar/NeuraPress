@@ -91,7 +91,7 @@ Generate realistic, current topics that could genuinely be in today's news:`;
     if (!response) throw new Error('No topics generated');
     // Parse JSON response
     const topics: CurrentTopic[] = JSON.parse(response);
-    console.log(`âœ… Generated ${topics.length} current trending topics`);
+    console.log(` ❌… Generated ${topics.length} current trending topics`);
     return topics;
   } catch (error) {
     console.error('âŒ Error generating trending topics:', error);
@@ -361,7 +361,7 @@ async function saveCurrentArticles(articles: ProcessedCurrentArticle[]): Promise
       }
       const article = new Article(articleData);
       await article.save();
-      console.log(`âœ… Saved current article: "${articleData.title}"`);
+      console.log(` ❌… Saved current article: "${articleData.title}"`);
       results.saved++;
     } catch (error) {
       const errorMsg = `Failed to save "${articleData.title}": ${error instanceof Error ? error.message : 'Unknown error'}`;

@@ -77,9 +77,9 @@ function RelatedArticleCard({ article }: { article: Article }) {
           <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs font-medium capitalize">
             {article.category}
           </span>
-          <span>â€¢</span>
+          <span>•</span>
           <span>{formatDate(new Date(article.publishedAt))}</span>
-          <span>â€¢</span>
+          <span>•</span>
           <span>{article.readingTime} min</span>
         </div>
         <h4 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">

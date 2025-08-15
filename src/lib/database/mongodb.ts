@@ -28,8 +28,8 @@ async function connectDB(): Promise<mongoose.Connection> {
     const opts = {
       bufferCommands: false,
       dbName: 'neurapress', // Explicitly use neurapress database
-      serverSelectionTimeoutMS: 10000, // 10 second timeout
-      socketTimeoutMS: 45000, // 45 second timeout
+      serverSelectionTimeoutMS: 30000, // 30 second timeout for production
+      socketTimeoutMS: 60000, // 60 second timeout for slow connections
       maxPoolSize: 10,
       minPoolSize: 5,
     };

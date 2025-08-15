@@ -188,7 +188,7 @@ export default function SearchBar({ initialSearch = '' }: SearchBarProps) {
                   onClick={handleSubmit}
                   className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                 >
-                  Search for "{search}" â†’
+                  Search for "{search}"  ←’
                 </button>
               </div>
             </div>

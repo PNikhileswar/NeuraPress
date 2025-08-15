@@ -24,16 +24,16 @@ async function makeAdmin(email) {
       return;
     }
     console.log(`\nFound user: ${user.name} (${user.email})`);
-    console.log(`Current admin status: ${user.isAdmin ? 'Admin âœ…' : 'Regular user âŒ'}`);
+    console.log(`Current admin status: ${user.isAdmin ? 'Admin  ❌…' : 'Regular user âŒ'}`);
     // Update user to be admin
     await users.updateOne(
       { _id: user._id },
       { $set: { isAdmin: true } }
     );
-    console.log(`\nâœ… Successfully made ${user.name} an admin!`);
+    console.log(`\n ❌… Successfully made ${user.name} an admin!`);
     // Verify update
     const updatedUser = await users.findOne({ _id: user._id });
-    console.log(`Updated admin status: ${updatedUser.isAdmin ? 'Admin âœ…' : 'Regular user âŒ'}`);
+    console.log(`Updated admin status: ${updatedUser.isAdmin ? 'Admin  ❌…' : 'Regular user âŒ'}`);
   } catch (error) {
     console.error('Error making user admin:', error);
   } finally {

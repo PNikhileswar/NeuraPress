@@ -40,7 +40,7 @@ export default async function FeaturedArticles() {
           href="/featured"
           className="text-blue-600 hover:text-blue-800 font-medium"
         >
-          View All Featured â†’
+          View All Featured  ←’
         </Link>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -96,9 +96,9 @@ function FeaturedArticleCard({ article, isLarge }: { article: Article; isLarge: 
           <span className="bg-white bg-opacity-30 backdrop-blur-sm px-2 py-1 rounded text-xs font-medium text-white">
             {article.category}
           </span>
-          <span className="text-white">â€¢</span>
+          <span className="text-white">•</span>
           <span className="text-gray-100">{formatDate(new Date(article.publishedAt))}</span>
-          <span className="text-white">â€¢</span>
+          <span className="text-white">•</span>
           <span className="text-gray-100">{article.readingTime} min read</span>
         </div>
         <h3 className={`font-bold mb-3 line-clamp-2 text-white drop-shadow-lg ${isLarge ? 'text-2xl' : 'text-lg'}`}>

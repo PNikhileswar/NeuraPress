@@ -162,7 +162,7 @@ export async function fetchRealTimeNews(options: {
             category 
           }));
           allArticles.push(...articlesWithCategory);
-          console.log(`âœ… Found ${currentArticles.length} REAL current ${category} articles`);
+          console.log(` ❌… Found ${currentArticles.length} REAL current ${category} articles`);
         }
         // Rate limiting
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -216,7 +216,7 @@ async function processRealNewsArticle(article: NewsAPIArticle, category: string)
       enhancedContent = await enhanceShortContent(article);
       // Validate that enhancement actually worked
       if (enhancedContent && enhancedContent.length > (article.content?.length || 0)) {
-        console.log(`âœ… Content successfully expanded: ${article.content?.length || 0} â†’ ${enhancedContent.length} chars`);
+        console.log(` ❌… Content successfully expanded: ${article.content?.length || 0}  ←’ ${enhancedContent.length} chars`);
       } else {
         console.log(`âš ï¸ Enhancement didn't expand content significantly`);
         enhancedContent = article.content || article.description || '';
@@ -225,10 +225,10 @@ async function processRealNewsArticle(article: NewsAPIArticle, category: string)
       console.log(`âŒ All enhancement methods failed: ${error instanceof Error ? error.message : String(error)}`);
       enhancedContent = article.content || article.description || '';
     }
-    console.log(`âœ¨ Final content length: ${enhancedContent.length} chars`);
+    console.log(` ❌¨ Final content length: ${enhancedContent.length} chars`);
   } else {
     enhancedContent = article.content || '';
-    console.log(`âœ… Using original content: ${enhancedContent.length} chars`);
+    console.log(` ❌… Using original content: ${enhancedContent.length} chars`);
   }
   // Add media to content
   const contentWithMedia = await addMediaToContent(enhancedContent, article, media);
@@ -284,12 +284,12 @@ async function enhanceShortContent(article: NewsAPIArticle): Promise<string> {
   const originalContent = article.content || '';
   const cleanContent = originalContent.replace(/\[\+\d+\s+chars?\]/g, '').trim();
   console.log(`ðŸ¤– Starting AI content extension for: "${article.title.substring(0, 50)}..."`);
-  console.log(`ðŸ“ Original: ${originalContent.length} chars â†’ Target: 1000-1500 chars`);
+  console.log(`ðŸ“ Original: ${originalContent.length} chars  ←’ Target: 1000-1500 chars`);
   // Strategy 1: Primary OpenAI Enhancement
   try {
     const enhanced = await enhanceWithOpenAI(article, cleanContent);
     if (enhanced && enhanced.length >= 800) { // Increased threshold
-      console.log(`âœ… OpenAI enhancement successful: ${enhanced.length} chars`);
+      console.log(` ❌… OpenAI enhancement successful: ${enhanced.length} chars`);
       return enhanced;
     }
   } catch (error) {
@@ -299,7 +299,7 @@ async function enhanceShortContent(article: NewsAPIArticle): Promise<string> {
   try {
     const enhanced = await enhanceWithAlternativeAI(article, cleanContent);
     if (enhanced && enhanced.length >= 800) { // Increased threshold
-      console.log(`âœ… Alternative AI enhancement successful: ${enhanced.length} chars`);
+      console.log(` ❌… Alternative AI enhancement successful: ${enhanced.length} chars`);
       return enhanced;
     }
   } catch (error) {
@@ -308,7 +308,7 @@ async function enhanceShortContent(article: NewsAPIArticle): Promise<string> {
   // Strategy 3: Template-based Extension (fallback when all AI fails)
   try {
     const enhanced = await enhanceWithTemplate(article, cleanContent);
-    console.log(`âœ… Template enhancement successful: ${enhanced.length} chars`);
+    console.log(` ❌… Template enhancement successful: ${enhanced.length} chars`);
     return enhanced;
   } catch (error) {
     console.log(`âŒ All enhancement methods failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -419,7 +419,7 @@ async function enhanceWithTemplate(article: NewsAPIArticle, cleanContent: string
   if (expandedContent.length < 2000) {
     expandedContent += `\n\nThis developing story represents a significant moment in the ongoing evolution of the industry landscape. The comprehensive coverage and analysis of these developments will continue as more details emerge and as the various stakeholders respond to the changing circumstances. For the most current and detailed information, readers are encouraged to follow ongoing coverage from ${sourceName} and other reliable industry sources, as this story is expected to see continued developments and updates in the days and weeks ahead.`;
   }
-  console.log(`ðŸ“ˆ Template expansion complete: ${cleanContent.length} â†’ ${expandedContent.length} chars`);
+  console.log(`ðŸ“ˆ Template expansion complete: ${cleanContent.length}  ←’ ${expandedContent.length} chars`);
   return expandedContent;
 }
 /**
@@ -534,7 +534,7 @@ async function saveRealTimeArticles(articles: ProcessedRealTimeArticle[]): Promi
       }
       const article = new Article(articleData);
       await article.save();
-      console.log(`âœ… Saved REAL article: "${articleData.title.substring(0, 50)}..."`);
+      console.log(` ❌… Saved REAL article: "${articleData.title.substring(0, 50)}..."`);
       results.saved++;
     } catch (error) {
       const errorMsg = `Failed to save "${articleData.title}": ${error instanceof Error ? error.message : 'Unknown error'}`;

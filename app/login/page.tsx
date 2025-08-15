@@ -127,7 +127,7 @@ function LoginForm() {
             href="/"
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
-            â† Back to Home
+             ← Back to Home
           </Link>
         </div>
       </div>

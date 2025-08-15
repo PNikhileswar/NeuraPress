@@ -93,7 +93,7 @@ export default function StatsWidget({ className = '', showCategories = true }: S
           href="/admin" 
           className="text-blue-600 hover:text-blue-700 font-medium"
         >
-          View Dashboard â†’
+          View Dashboard  ←’
         </Link>
       </div>
     </div>

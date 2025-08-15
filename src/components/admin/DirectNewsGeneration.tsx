@@ -207,7 +207,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
       {error && (
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-start">
-            <span className="text-red-500 mr-2">âŒ</span>
+            <span className="text-red-500 mr-2">Œ</span>
             <div>
               <h3 className="text-red-800 font-medium">Generation Failed</h3>
               <p className="text-red-600 text-sm mt-1">{error}</p>
@@ -219,14 +219,14 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
       {results && (
         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-start mb-4">
-            <span className="text-green-500 mr-2">âœ…</span>
+            <span className="text-green-500 mr-2"> ❌…</span>
             <div>
               <h3 className="text-green-800 font-medium">Generation Complete!</h3>
               <div className="text-sm text-green-600 mt-1 grid grid-cols-2 gap-2">
                 <span>ðŸ“ Processed: {results.processed}</span>
                 <span>ðŸ’¾ Saved: {results.saved}</span>
-                <span>â­ï¸ Skipped: {results.skipped}</span>
-                <span>âŒ Errors: {results.errors}</span>
+                <span>­ï¸ Skipped: {results.skipped}</span>
+                <span>Œ Errors: {results.errors}</span>
               </div>
             </div>
           </div>
@@ -242,7 +242,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
                     </h5>
                     <div className="text-xs text-gray-500 flex items-center justify-between">
                       <span>
-                        ðŸ“‚ {article.category} â€¢ ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}
+                        ðŸ“‚ {article.category}  • ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}
                       </span>
                       <span>
                         ðŸ“° {article.source}
@@ -255,7 +255,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
                         rel="noopener noreferrer"
                         className="text-xs text-blue-600 hover:text-blue-800"
                       >
-                        View Original â†’
+                        View Original  ←’
                       </a>
                     )}
                   </div>
@@ -266,7 +266,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
           {/* Error Details */}
           {results.errorDetails && results.errorDetails.length > 0 && (
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-              <h4 className="font-medium text-yellow-800 mb-2">âš ï¸ Some Issues Occurred:</h4>
+              <h4 className="font-medium text-yellow-800 mb-2">š ï¸ Some Issues Occurred:</h4>
               <div className="text-sm text-yellow-700 space-y-1">
                 {results.errorDetails.map((error, index) => (
                   <div key={index} className="text-xs">{error}</div>
@@ -280,11 +280,11 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
       <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <h3 className="font-medium text-blue-800 mb-2">ðŸ’¡ How Direct News Generation Works</h3>
         <ul className="text-sm text-blue-700 space-y-1">
-          <li>â€¢ Fetches real articles directly from 80,000+ news sources via newsdata.io</li>
-          <li>â€¢ Processes actual news content instead of generating from topics</li>
-          <li>â€¢ Automatically adds relevant images and formatting</li>
-          <li>â€¢ Includes proper attribution to original news sources</li>
-          <li>â€¢ Filters for substantial content and avoids duplicates</li>
+          <li> • Fetches real articles directly from 80,000+ news sources via newsdata.io</li>
+          <li> • Processes actual news content instead of generating from topics</li>
+          <li> • Automatically adds relevant images and formatting</li>
+          <li> • Includes proper attribution to original news sources</li>
+          <li> • Filters for substantial content and avoids duplicates</li>
         </ul>
       </div>
     </div>

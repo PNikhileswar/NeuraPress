@@ -20,7 +20,7 @@ export default function SupportPage() {
       type: 'link'
     },
     {
-      icon: 'â“',
+      icon: '“',
       title: 'FAQ',
       description: 'Find answers to commonly asked questions',
       action: '#faq',

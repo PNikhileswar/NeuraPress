@@ -3,6 +3,29 @@ import connectDB from '@/lib/database/mongodb';
 import Article from '@/lib/database/models/Article';
 export async function GET() {
   try {
+    // Skip database operations during build time
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      const baseUrl = process.env.NEXTAUTH_URL || 'https://neura-press.vercel.app';
+      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/categories</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>`;
+      return new NextResponse(sitemap, {
+        headers: { 'Content-Type': 'application/xml' },
+      });
+    }
+
     await connectDB();
     const articles = await Article.find({}, 'slug updatedAt').sort({ publishedAt: -1 });
     const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';

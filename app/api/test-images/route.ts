@@ -2,6 +2,17 @@
 import connectDB from '@/lib/database/mongodb';
 import Article from '@/lib/database/models/Article';
 export async function GET() {
+  // Skip database operations during build time
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return new NextResponse(`
+    <!DOCTYPE html>
+    <html><head><title>Image Test - Build Mode</title></head>
+    <body><h1>Image Loading Test</h1><p>Build time mode - no database connection</p></body>
+    </html>`, {
+      headers: { 'Content-Type': 'text/html' },
+    });
+  }
+
   try {
     await connectDB();
     const articles = await Article.find({}).select('title ogImage category').limit(20);

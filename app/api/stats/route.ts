@@ -145,7 +145,8 @@ export async function GET(request: NextRequest) {
         }
       },
       recentEvents: getRecentEvents(5), // Include recent activity
-      cached: false
+      cached: false,
+      deploymentCheck: "v2.0" // Version check
     };
     // Update cache with fresh data
     updateStatsCache(response);

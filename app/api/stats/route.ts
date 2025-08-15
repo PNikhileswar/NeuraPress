@@ -4,44 +4,6 @@ import Article from '@/lib/database/models/Article';
 import { getCachedStats, updateStatsCache, getRecentEvents } from '@/lib/utils/stats-cache';
 // GET /api/stats - Get dynamic platform statistics
 export async function GET(request: NextRequest) {
-  // Skip database operations during build time
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    return NextResponse.json({
-      overview: {
-        totalArticles: 0,
-        featuredArticles: 0,
-        totalReadingTime: 0,
-        avgReadingTime: 0,
-        recentArticles: 0,
-        lastUpdated: new Date()
-      },
-      categories: [],
-      media: {
-        totalImages: 0,
-        totalVideos: 0,
-        totalTweets: 0,
-        totalMediaItems: 0,
-        avgImagesPerArticle: 0,
-        avgVideosPerArticle: 0,
-        avgTweetsPerArticle: 0
-      },
-      tags: [],
-      performance: {
-        articlesThisWeek: 0,
-        avgArticlesPerDay: '0.0',
-        contentHealth: {
-          withImages: 0,
-          withVideos: 0,
-          withTweets: 0,
-          withOgImage: 0
-        }
-      },
-      recentEvents: [],
-      cached: false,
-      buildTime: true
-    });
-  }
-
   try {
     // Check cache first
     const cacheResult = getCachedStats();

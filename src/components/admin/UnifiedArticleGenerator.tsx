@@ -217,7 +217,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
               Process real news articles directly from 80,000+ professional news sources
             </p>
             <div className="mt-2 text-xs text-gray-500">
-              \uD83D\uDD25 Breaking news  • ðŸ“ˆ Real journalism  • š¡ Instant content
+              \uD83D\uDD25 Breaking news  • \uD83D\uDCC8 Real journalism  • ⚡ Instant content
             </div>
           </div>
         </div>
@@ -467,10 +467,10 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                     </h5>
                     <div className="text-xs text-gray-500 flex items-center justify-between">
                       <span>
-                        ðŸ“‚ {article.category}  • ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}
+                        \uD83D\uDCC2 {article.category}  • ⏲️ {new Date(article.publishedAt).toLocaleDateString()}
                       </span>
                       {article.source && (
-                        <span>ðŸ“° {article.source}</span>
+                        <span>\uD83D\uDCC0 {article.source}</span>
                       )}
                     </div>
                     {article.originalUrl && (

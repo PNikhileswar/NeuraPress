@@ -245,7 +245,7 @@ By following the insights, frameworks, and recommendations presented in this com
  */
 async function generateFallbackContent(request: ContentGenerationRequest): Promise<GeneratedContent> {
   const { topic, keywords, category } = request;
-  console.log('ðŸ” Searching for relevant media for topic:', topic);
+  console.log('🔍 Searching for relevant media for topic:', topic);
   let dynamicMedia: {
     images: MediaItem[];
     videos: MediaItem[];
@@ -363,7 +363,7 @@ export async function generateArticleContent(request: ContentGenerationRequest):
   const { topic, keywords, category } = request;
   // For now, we use the enhanced fallback content generation which provides 
   // comprehensive, well-structured articles with dynamic media
-  console.log('ðŸš€ Generating enhanced content with dynamic media integration');
+  console.log('🚀 Generating enhanced content with dynamic media integration');
   return await generateFallbackContent(request);
 }
 /**

@@ -17,7 +17,7 @@ const MAX_EVENTS = 100;
  * Invalidate the stats cache when content changes
  */
 export function invalidateStatsCache(event: StatsUpdateEvent) {
-  console.log(`ðŸ“Š Invalidating stats cache due to: ${event.type} in ${event.category}`);
+  console.log(`📊 Invalidating stats cache due to: ${event.type} in ${event.category}`);
   // Clear cache
   statsCache = null;
   lastCacheUpdate = null;
@@ -59,7 +59,7 @@ export function getCachedStats() {
 export function updateStatsCache(data: any) {
   statsCache = data;
   lastCacheUpdate = new Date();
-  console.log('ðŸ“Š Stats cache updated');
+  console.log('📊 Stats cache updated');
 }
 /**
  * Get recent activity events
@@ -75,5 +75,5 @@ export function notifyStatsUpdate(event: StatsUpdateEvent) {
   // 1. Send WebSocket messages to connected clients
   // 2. Trigger Server-Sent Events
   // 3. Update real-time dashboards
-  console.log(`ðŸ”” Stats update notification: ${event.type} for ${event.category}`);
+  console.log(`🔔 Stats update notification: ${event.type} for ${event.category}`);
 }

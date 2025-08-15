@@ -11,14 +11,14 @@ export async function GET(request: NextRequest) {
     // Check cache first
     const cacheResult = getCachedStats();
     if (cacheResult.cached && !cacheResult.needsRefresh) {
-      console.log('ðŸ“Š Returning cached stats');
+  console.log('📊 Returning cached stats');
       return NextResponse.json({
         ...cacheResult.data,
         cached: true,
         lastUpdate: cacheResult.lastUpdate
       });
     }
-    console.log('ðŸ“Š Fetching fresh stats from database');
+  console.log('📊 Fetching fresh stats from database');
     await connectDB();
     // Get category counts
     const categoryStats = await Article.aggregate([

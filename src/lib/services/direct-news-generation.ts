@@ -100,8 +100,8 @@ export async function fetchAndProcessNewsArticles(options: {
       try {
         // Saurav.tech API endpoint for top headlines by category
         const url = `https://saurav.tech/NewsAPI/top-headlines/category/${category}/${country}.json`;
-        console.log(`ðŸ“° Fetching ${category} articles from saurav.tech News API...`);
-        console.log(`ðŸ”— API URL: ${url}`);
+  console.log(`📰 Fetching ${category} articles from saurav.tech News API...`);
+  console.log(`🔗 API URL: ${url}`);
         const response = await fetch(url);
         if (!response.ok) {
           console.warn(`âŒ Failed to fetch ${category} articles: ${response.status} ${response.statusText}`);
@@ -140,10 +140,10 @@ export async function fetchAndProcessNewsArticles(options: {
       }
     }
     if (allArticles.length === 0) {
-      console.warn('ðŸ“­ No articles found from saurav.tech News API');
+  console.warn('📭 No articles found from saurav.tech News API');
       return [];
     }
-    console.log(`ðŸ“Š Total articles fetched: ${allArticles.length}`);
+  console.log(`📊 Total articles fetched: ${allArticles.length}`);
     // Sort by recency if requested
     if (prioritizeRecent) {
       allArticles.sort((a, b) => 
@@ -160,7 +160,7 @@ export async function fetchAndProcessNewsArticles(options: {
     const processedArticles: ProcessedArticle[] = [];
     for (const { article, category } of selectedArticles) {
       try {
-        console.log(`ðŸ”„ Processing article: "${article.title}"`);
+  console.log(`🛠️ Processing article: "${article.title}"`);
         const processed = await processNewsArticle(article, category);
         processedArticles.push(processed);
         // Small delay between processing
@@ -449,18 +449,18 @@ export async function generateArticlesFromNewsData(options: {
 }> {
   const { autoSave = true, ...fetchOptions } = options;
   try {
-    console.log('ðŸš€ Starting direct news article generation from saurav.tech News API...');
+  console.log('🚀 Starting direct news article generation from saurav.tech News API...');
     // Fetch and process articles
     const processedArticles = await fetchAndProcessNewsArticles(fetchOptions);
     if (processedArticles.length === 0) {
       return { processed: [] };
     }
-    console.log(`ðŸ“ Processed ${processedArticles.length} articles`);
+  console.log(`📝 Processed ${processedArticles.length} articles`);
     let saveResults;
     if (autoSave) {
       // Save to database
       saveResults = await saveProcessedArticles(processedArticles);
-      console.log(`ðŸ’¾ Save results: ${saveResults.saved} saved, ${saveResults.skipped} skipped, ${saveResults.errors.length} errors`);
+  console.log(`💾 Save results: ${saveResults.saved} saved, ${saveResults.skipped} skipped, ${saveResults.errors.length} errors`);
     }
     return {
       processed: processedArticles,

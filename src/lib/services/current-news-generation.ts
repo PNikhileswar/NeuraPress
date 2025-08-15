@@ -91,10 +91,10 @@ Generate realistic, current topics that could genuinely be in today's news:`;
     if (!response) throw new Error('No topics generated');
     // Parse JSON response
     const topics: CurrentTopic[] = JSON.parse(response);
-    console.log(` ❌… Generated ${topics.length} current trending topics`);
+  console.log(`📝 Generated ${topics.length} current trending topics`);
     return topics;
   } catch (error) {
-    console.error('âŒ Error generating trending topics:', error);
+  console.error('❌ Error generating trending topics:', error);
     // Fallback topics for current date
     return [
       {
@@ -160,7 +160,7 @@ Make it engaging, informative, and feel like genuine current news.`;
     if (!article) throw new Error('No article content generated');
     return article;
   } catch (error) {
-    console.error('âŒ Error generating article content:', error);
+  console.error('❌ Error generating article content:', error);
     return `${topic.description}\n\nThis is a developing story. More details will be provided as they become available.`;
   }
 }
@@ -169,7 +169,7 @@ Make it engaging, informative, and feel like genuine current news.`;
  */
 async function processCurrentTopic(topic: CurrentTopic): Promise<ProcessedCurrentArticle> {
   // Generate full article content
-  console.log(`ðŸ”„ Generating current article: "${topic.title}"`);
+  console.log(`🛠️ Generating current article: "${topic.title}"`);
   const content = await generateArticleFromTopic(topic);
   // Search for relevant media
   const media = await searchTopicMedia(topic.title, topic.keywords, topic.category);
@@ -296,7 +296,7 @@ export async function generateCurrentNewsArticles(options: {
     autoSave = true 
   } = options;
   try {
-    console.log(`ðŸš€ Generating ${limit} current news articles for ${new Date().toDateString()}...`);
+  console.log(`🚀 Generating ${limit} current news articles for ${new Date().toDateString()}...`);
     // Generate current trending topics
     const topics = await generateCurrentTrendingTopics(categories, limit);
     if (topics.length === 0) {
@@ -311,23 +311,23 @@ export async function generateCurrentNewsArticles(options: {
         // Small delay between processing
         await new Promise(resolve => setTimeout(resolve, 100));
       } catch (error) {
-        console.error(`âŒ Error processing topic "${topic.title}":`, error);
+  console.error(`❌ Error processing topic "${topic.title}":`, error);
         continue;
       }
     }
-    console.log(`ðŸ“ Generated ${processedArticles.length} current articles`);
+  console.log(`📝 Generated ${processedArticles.length} current articles`);
     let saveResults;
     if (autoSave) {
       // Save to database
       saveResults = await saveCurrentArticles(processedArticles);
-      console.log(`ðŸ’¾ Save results: ${saveResults.saved} saved, ${saveResults.skipped} skipped, ${saveResults.errors.length} errors`);
+  console.log(`💾 Save results: ${saveResults.saved} saved, ${saveResults.skipped} skipped, ${saveResults.errors.length} errors`);
     }
     return {
       processed: processedArticles,
       ...saveResults
     };
   } catch (error) {
-    console.error('âŒ Error in generateCurrentNewsArticles:', error);
+  console.error('❌ Error in generateCurrentNewsArticles:', error);
     throw error;
   }
 }
@@ -355,13 +355,13 @@ async function saveCurrentArticles(articles: ProcessedCurrentArticle[]): Promise
         ]
       });
       if (existingArticle) {
-        console.log(`â­ï¸ Skipping similar article: "${articleData.title}"`);
+  console.log(`⏭️ Skipping similar article: "${articleData.title}"`);
         results.skipped++;
         continue;
       }
       const article = new Article(articleData);
       await article.save();
-      console.log(` ❌… Saved current article: "${articleData.title}"`);
+  console.log(`💾 Saved current article: "${articleData.title}"`);
       results.saved++;
     } catch (error) {
       const errorMsg = `Failed to save "${articleData.title}": ${error instanceof Error ? error.message : 'Unknown error'}`;

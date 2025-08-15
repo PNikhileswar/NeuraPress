@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
     };
     invalidateStatsCache(updateEvent);
     notifyStatsUpdate(updateEvent);
-    console.log(`ðŸ“ Article created: "${article.title}" in ${article.category} category`);
+  console.log(`📝 Article created: "${article.title}" in ${article.category} category`);
     return NextResponse.json(article, { status: 201 });
   } catch (error) {
     console.error('Error creating article:', error);

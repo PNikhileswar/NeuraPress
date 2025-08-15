@@ -144,7 +144,7 @@ async function seedDatabase() {
     await collection.createIndex({ publishedAt: -1 });
     await collection.createIndex({ category: 1 });
     console.log('Database indexes created successfully');
-    console.log('ðŸŽ‰ Database seeded successfully!');
+  console.log('🎉 Database seeded successfully!');
   } catch (error) {
     console.error('Error seeding database:', error);
   } finally {

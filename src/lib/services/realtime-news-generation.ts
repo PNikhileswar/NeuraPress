@@ -127,7 +127,7 @@ export async function fetchRealTimeNews(options: {
           `sortBy=publishedAt&` +
           `pageSize=${Math.ceil(limit / categories.length) + 2}&` + // Get a few extra for filtering
           `apiKey=${NEWS_API_KEY}`;
-        console.log(`ðŸ“° Fetching REAL ${newsAPICategory} news from NewsAPI.org...`);
+  console.log(`📰 Fetching REAL ${newsAPICategory} news from NewsAPI.org...`);
         const response = await fetch(url);
         if (!response.ok) {
           const errorText = await response.text();
@@ -135,7 +135,7 @@ export async function fetchRealTimeNews(options: {
           continue;
         }
         const data: NewsAPIResponse = await response.json();
-        console.log(`ðŸ“Š Real news for ${category}: ${data.articles?.length || 0} articles`);
+  console.log(`📊 Real news for ${category}: ${data.articles?.length || 0} articles`);
         if (data.status === 'ok' && data.articles && data.articles.length > 0) {
           // Filter with very relaxed criteria - prioritize getting articles
           const currentArticles = data.articles.filter(article => {
@@ -154,7 +154,7 @@ export async function fetchRealTimeNews(options: {
                                   !article.description.toLowerCase().includes('removed');
             // Accept articles up to 7 days old initially for testing
             const withinTimeWindow = daysOld <= 7;
-            console.log(`ðŸ“„ "${article.title.substring(0, 40)}...": ${daysOld.toFixed(1)} days old, valid: ${hasValidContent && withinTimeWindow}`);
+            console.log(`📄 "${article.title.substring(0, 40)}...": ${daysOld.toFixed(1)} days old, valid: ${hasValidContent && withinTimeWindow}`);
             return hasValidContent && withinTimeWindow;
           });
           const articlesWithCategory = currentArticles.map(article => ({ 
@@ -179,7 +179,7 @@ export async function fetchRealTimeNews(options: {
       .sort((a, b) => 
         new Date(b.article.publishedAt).getTime() - new Date(a.article.publishedAt).getTime()
       );
-    console.log(`ðŸŽ¯ Total unique REAL articles: ${uniqueArticles.length}`);
+  console.log(`🏯 Total unique REAL articles: ${uniqueArticles.length}`);
     return uniqueArticles.slice(0, limit);
   } catch (error) {
     console.error('âŒ Error in fetchRealTimeNews:', error);
@@ -190,7 +190,7 @@ export async function fetchRealTimeNews(options: {
  * Process real news article into our format
  */
 async function processRealNewsArticle(article: NewsAPIArticle, category: string): Promise<ProcessedRealTimeArticle> {
-  console.log(`ðŸ”„ Processing REAL article: "${article.title}"`);
+  console.log(`🛠️ Processing REAL article: "${article.title}"`);
   // Extract keywords from content
   const keywords = extractKeywordsFromContent(article.title, article.description, article.content || '');
   // Search for relevant media
@@ -210,8 +210,8 @@ async function processRealNewsArticle(article: NewsAPIArticle, category: string)
     article.content.match(/\[\+\d+\s+chars?\]/) ||  // Regex for [+123 chars]
     article.content.split(' ').length < 120; // Less than ~120 words needs enhancement
   if (isTruncated) {
-    console.log(`ðŸ¤– Enhancing NewsAPI content for: "${article.title.substring(0, 50)}..."`);
-    console.log(`ðŸ“ Original content: ${(article.content || 'None').substring(0, 200)}${article.content && article.content.length > 200 ? '...' : ''}`);
+  console.log(`🤔 Enhancing NewsAPI content for: "${article.title.substring(0, 50)}..."`);
+  console.log(`📝 Original content: ${(article.content || 'None').substring(0, 200)}${article.content && article.content.length > 200 ? '...' : ''}`);
     try {
       enhancedContent = await enhanceShortContent(article);
       // Validate that enhancement actually worked
@@ -283,8 +283,8 @@ async function processRealNewsArticle(article: NewsAPIArticle, category: string)
 async function enhanceShortContent(article: NewsAPIArticle): Promise<string> {
   const originalContent = article.content || '';
   const cleanContent = originalContent.replace(/\[\+\d+\s+chars?\]/g, '').trim();
-  console.log(`ðŸ¤– Starting AI content extension for: "${article.title.substring(0, 50)}..."`);
-  console.log(`ðŸ“ Original: ${originalContent.length} chars  ←’ Target: 1000-1500 chars`);
+  console.log(`🤔 Starting AI content extension for: "${article.title.substring(0, 50)}..."`);
+  console.log(`📝 Original: ${originalContent.length} chars  ←’ Target: 1000-1500 chars`);
   // Strategy 1: Primary OpenAI Enhancement
   try {
     const enhanced = await enhanceWithOpenAI(article, cleanContent);
@@ -374,7 +374,7 @@ async function enhanceWithAlternativeAI(article: NewsAPIArticle, cleanContent: s
  * Template-based content enhancement (last resort fallback)
  */
 async function enhanceWithTemplate(article: NewsAPIArticle, cleanContent: string): Promise<string> {
-  console.log(`ðŸ”§ Using template-based enhancement as last resort`);
+  console.log(`🛠️ Using template-based enhancement as last resort`);
   const sourceName = article.source?.name || 'the news source';
   const publishDate = new Date(article.publishedAt).toLocaleDateString();
   const publishTime = new Date(article.publishedAt).toLocaleTimeString();
@@ -419,7 +419,7 @@ async function enhanceWithTemplate(article: NewsAPIArticle, cleanContent: string
   if (expandedContent.length < 2000) {
     expandedContent += `\n\nThis developing story represents a significant moment in the ongoing evolution of the industry landscape. The comprehensive coverage and analysis of these developments will continue as more details emerge and as the various stakeholders respond to the changing circumstances. For the most current and detailed information, readers are encouraged to follow ongoing coverage from ${sourceName} and other reliable industry sources, as this story is expected to see continued developments and updates in the days and weeks ahead.`;
   }
-  console.log(`ðŸ“ˆ Template expansion complete: ${cleanContent.length}  ←’ ${expandedContent.length} chars`);
+  console.log(`📈 Template expansion complete: ${cleanContent.length}  ←’ ${expandedContent.length} chars`);
   return expandedContent;
 }
 /**
@@ -567,7 +567,7 @@ export async function generateRealTimeNewsArticles(options: {
     autoSave = true 
   } = options;
   try {
-    console.log(`ðŸš€ Fetching ${limit} REAL current news articles...`);
+  console.log(`🚀 Fetching ${limit} REAL current news articles...`);
     console.log(`Settings: categories=${categories.join(',')}, hours=${hours}, country=${country}`);
     // Fetch real current news
     const newsArticles = await fetchRealTimeNews({ 
@@ -592,11 +592,11 @@ export async function generateRealTimeNewsArticles(options: {
         continue;
       }
     }
-    console.log(`ðŸ“ Processed ${processedArticles.length} REAL articles`);
+  console.log(`📝 Processed ${processedArticles.length} REAL articles`);
     let saveResults;
     if (autoSave) {
       saveResults = await saveRealTimeArticles(processedArticles);
-      console.log(`ðŸ’¾ Save results: ${saveResults.saved} saved, ${saveResults.skipped} skipped, ${saveResults.errors.length} errors`);
+  console.log(`💾 Save results: ${saveResults.saved} saved, ${saveResults.skipped} skipped, ${saveResults.errors.length} errors`);
     }
     return {
       processed: processedArticles,

@@ -130,7 +130,6 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
-  useSecureCookies: process.env.NODE_ENV === 'production',
   session: {
     strategy: 'jwt', // Use JWT instead of database sessions
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -145,9 +144,9 @@ export const authOptions: NextAuthOptions = {
         sameSite: 'lax',
         path: '/',
         secure: process.env.NODE_ENV === 'production',
-        domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined
+        // Remove domain specification to let NextAuth handle it automatically
       }
     }
   },
-  debug: false, // Disable debug logs to reduce console spam
+  debug: process.env.NODE_ENV === 'development', // Enable debug logs in development only
 };

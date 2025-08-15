@@ -8,7 +8,15 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true, // This prevents OAuthAccountNotLinked error
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+          scope: "openid email profile"
+        }
+      }
     }),
   ],
   callbacks: {
@@ -61,30 +69,36 @@ export const authOptions: NextAuthOptions = {
         token.picture = imageUrl;
         // Check if this is the first user by checking our custom collection
         try {
-          await connectDB();
-          const db = mongoose.connection.db;
-          if (db) {
-            const customUsersCollection = db.collection('app_users');
-            // Check if user already exists in our custom collection
-            let existingUser = await customUsersCollection.findOne({ email: user.email });
-            if (!existingUser) {
-              // Check if this is the first user
-              const userCount = await customUsersCollection.countDocuments();
-              const isFirstUser = userCount === 0;
-              // Create user in our custom collection
-              await customUsersCollection.insertOne({
-                email: user.email,
-                name: user.name,
-                image: imageUrl, // Use cleaned image URL
-                isAdmin: isFirstUser,
-                createdAt: new Date()
-              });
-              token.isAdmin = isFirstUser;
+          // Optimize: Only connect if we need to check/create user
+          if (user && user.email) {
+            await connectDB();
+            const db = mongoose.connection.db;
+            if (db) {
+              const customUsersCollection = db.collection('app_users');
+              // Use faster findOne with projection to only get isAdmin field
+              let existingUser = await customUsersCollection.findOne(
+                { email: user.email }, 
+                { projection: { isAdmin: 1 } }
+              );
+              if (!existingUser) {
+                // Only count if user doesn't exist (rare case)
+                const userCount = await customUsersCollection.countDocuments();
+                const isFirstUser = userCount === 0;
+                // Create user in our custom collection
+                await customUsersCollection.insertOne({
+                  email: user.email,
+                  name: user.name,
+                  image: imageUrl,
+                  isAdmin: isFirstUser,
+                  createdAt: new Date()
+                });
+                token.isAdmin = isFirstUser;
+              } else {
+                token.isAdmin = existingUser.isAdmin || false;
+              }
             } else {
-              token.isAdmin = existingUser.isAdmin || false;
+              token.isAdmin = false;
             }
-          } else {
-            token.isAdmin = false;
           }
         } catch (error) {
           console.error('Error in JWT callback:', error);
@@ -119,6 +133,35 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt', // Use JWT instead of database sessions
     maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production'
+      }
+    },
+    callbackUrl: {
+      name: `next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production'
+      }
+    },
+    csrfToken: {
+      name: `next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production'
+      }
+    }
   },
   debug: false, // Disable debug logs to reduce console spam
 };

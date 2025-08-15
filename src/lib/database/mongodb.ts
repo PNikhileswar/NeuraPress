@@ -21,9 +21,10 @@ async function connectDB(): Promise<mongoose.Connection> {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      dbName: 'neurapress', // Explicitly use neurapress database
     };
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('Connected to MongoDB');
+      console.log('Connected to MongoDB (neurapress database)');
       return mongoose.connection;
     });
   }

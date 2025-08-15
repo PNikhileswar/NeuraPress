@@ -6,6 +6,15 @@
   "framework": "nextjs",
   "outputDirectory": ".next",
   "functions": {
+    "app/api/auth/**/*.ts": {
+      "maxDuration": 60
+    },
+    "app/api/stats/*.ts": {
+      "maxDuration": 60
+    },
+    "app/api/articles/*.ts": {
+      "maxDuration": 60
+    },
     "app/api/**/*.ts": {
       "maxDuration": 30
     }

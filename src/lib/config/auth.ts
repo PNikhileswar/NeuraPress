@@ -1,5 +1,8 @@
 ﻿import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import connectDB from '@/lib/database/mongodb';
+import mongoose from 'mongoose';
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -21,21 +24,20 @@ export const authOptions: NextAuthOptions = {
           token.isAdmin = session.isAdmin;
         }
         if (session.forceRefresh) {
-          // Force refresh from database
+          // Force refresh from database using Mongoose
           try {
-            const { MongoClient } = require('mongodb');
-            const client = new MongoClient(process.env.MONGODB_URI!);
-            await client.connect();
-            const db = client.db('neurapress');
-            const customUsersCollection = db.collection('app_users');
-            const currentUser = await customUsersCollection.findOne({ email: token.email });
-            if (currentUser) {
-              token.isAdmin = currentUser.isAdmin || false;
-              token.name = currentUser.name;
-              token.picture = currentUser.image;
-              token.refreshedAt = Date.now(); // Add timestamp
+            await connectDB();
+            const db = mongoose.connection.db;
+            if (db) {
+              const customUsersCollection = db.collection('app_users');
+              const currentUser = await customUsersCollection.findOne({ email: token.email });
+              if (currentUser) {
+                token.isAdmin = currentUser.isAdmin || false;
+                token.name = currentUser.name;
+                token.picture = currentUser.image;
+                token.refreshedAt = Date.now(); // Add timestamp
+              }
             }
-            await client.close();
           } catch (error) {
             console.error('Error refreshing token from database:', error);
           }
@@ -59,30 +61,31 @@ export const authOptions: NextAuthOptions = {
         token.picture = imageUrl;
         // Check if this is the first user by checking our custom collection
         try {
-          const { MongoClient } = require('mongodb');
-          const client = new MongoClient(process.env.MONGODB_URI!);
-          await client.connect();
-          const db = client.db('neurapress');
-          const customUsersCollection = db.collection('app_users');
-          // Check if user already exists in our custom collection
-          let existingUser = await customUsersCollection.findOne({ email: user.email });
-          if (!existingUser) {
-            // Check if this is the first user
-            const userCount = await customUsersCollection.countDocuments();
-            const isFirstUser = userCount === 0;
-            // Create user in our custom collection
-            await customUsersCollection.insertOne({
-              email: user.email,
-              name: user.name,
-              image: imageUrl, // Use cleaned image URL
-              isAdmin: isFirstUser,
-              createdAt: new Date()
-            });
-            token.isAdmin = isFirstUser;
+          await connectDB();
+          const db = mongoose.connection.db;
+          if (db) {
+            const customUsersCollection = db.collection('app_users');
+            // Check if user already exists in our custom collection
+            let existingUser = await customUsersCollection.findOne({ email: user.email });
+            if (!existingUser) {
+              // Check if this is the first user
+              const userCount = await customUsersCollection.countDocuments();
+              const isFirstUser = userCount === 0;
+              // Create user in our custom collection
+              await customUsersCollection.insertOne({
+                email: user.email,
+                name: user.name,
+                image: imageUrl, // Use cleaned image URL
+                isAdmin: isFirstUser,
+                createdAt: new Date()
+              });
+              token.isAdmin = isFirstUser;
+            } else {
+              token.isAdmin = existingUser.isAdmin || false;
+            }
           } else {
-            token.isAdmin = existingUser.isAdmin || false;
+            token.isAdmin = false;
           }
-          await client.close();
         } catch (error) {
           console.error('Error in JWT callback:', error);
           token.isAdmin = false;

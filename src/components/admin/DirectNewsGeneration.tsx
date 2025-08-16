@@ -96,7 +96,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          📰 Direct News Generation
+          ðŸ“° Direct News Generation
         </h2>
         <p className="text-gray-600">
           Generate articles directly from real news content using newsdata.io - no topics required!
@@ -201,7 +201,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
             : 'bg-blue-600 text-white hover:bg-blue-700'
         }`}
       >
-  {isGenerating ? '🛠️ Generating Articles...' : '🚀 Generate Articles from News'}
+        {isGenerating ? 'ðŸ”„ Generating Articles...' : 'ðŸš€ Generate Articles from News'}
       </button>
       {/* Error Display */}
       {error && (
@@ -223,8 +223,8 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
             <div>
               <h3 className="text-green-800 font-medium">Generation Complete!</h3>
               <div className="text-sm text-green-600 mt-1 grid grid-cols-2 gap-2">
-                <span>📝 Processed: {results.processed}</span>
-                <span>💾 Saved: {results.saved}</span>
+                <span>ðŸ“ Processed: {results.processed}</span>
+                <span>ðŸ’¾ Saved: {results.saved}</span>
                 <span>­ï¸ Skipped: {results.skipped}</span>
                 <span>Œ Errors: {results.errors}</span>
               </div>
@@ -242,10 +242,10 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
                     </h5>
                     <div className="text-xs text-gray-500 flex items-center justify-between">
                       <span>
-                        📂 {article.category}  • ⏲️ {new Date(article.publishedAt).toLocaleDateString()}
+                        ðŸ“‚ {article.category}  • ðŸ•’ {new Date(article.publishedAt).toLocaleDateString()}
                       </span>
                       <span>
-                        📰 {article.source}
+                        ðŸ“° {article.source}
                       </span>
                     </div>
                     {article.originalUrl && (
@@ -278,7 +278,7 @@ const DirectNewsGeneration: React.FC<DirectNewsGenerationProps> = ({
       )}
       {/* Info Box */}
       <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-  <h3 className="font-medium text-blue-800 mb-2">💡 How Direct News Generation Works</h3>
+        <h3 className="font-medium text-blue-800 mb-2">ðŸ’¡ How Direct News Generation Works</h3>
         <ul className="text-sm text-blue-700 space-y-1">
           <li> • Fetches real articles directly from 80,000+ news sources via newsdata.io</li>
           <li> • Processes actual news content instead of generating from topics</li>

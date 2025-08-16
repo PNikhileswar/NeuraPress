@@ -1,4 +1,4 @@
-﻿'use client';
+﻿  'use client';
 import React, { useState } from 'react';
 interface UnifiedArticleGeneratorProps {
   onArticlesGenerated?: (articles: any[]) => void;
@@ -162,7 +162,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          \uD83D\uDE80 Article Generation Dashboard
+          🚀 Article Generation Dashboard
         </h1>
         <p className="text-gray-600">
           Choose between topic-based AI generation or direct news processing
@@ -187,13 +187,13 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                 onChange={() => setGenerationType('topic-based')}
                 className="mr-3 h-4 w-4 text-blue-600"
               />
-              <h3 className="font-semibold text-gray-800">\uD83C\uDFAF Topic-Based Generation</h3>
+              <h3 className="font-semibold text-gray-800">🎯 Topic-Based Generation</h3>
             </div>
             <p className="text-sm text-gray-600">
               Generate comprehensive articles from trending topics using AI content creation
             </p>
             <div className="mt-2 text-xs text-gray-500">
-              \u2728 AI-generated • \uD83D\uDCC8 Comprehensive guides • \u26A1 Creative content
+              ✨ AI-generated • 📈 Comprehensive guides • ⚡ Creative content
             </div>
           </div>
           <div 
@@ -211,13 +211,13 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                 onChange={() => setGenerationType('direct-news')}
                 className="mr-3 h-4 w-4 text-green-600"
               />
-              <h3 className="font-semibold text-gray-800">\uD83D\uDCF0 Direct News Generation</h3>
+              <h3 className="font-semibold text-gray-800">📰 Direct News Generation</h3>
             </div>
             <p className="text-sm text-gray-600">
               Process real news articles directly from 80,000+ professional news sources
             </p>
             <div className="mt-2 text-xs text-gray-500">
-              \uD83D\uDD25 Breaking news  • \uD83D\uDCC8 Real journalism  • ⚡ Instant content
+              🔥 Breaking news  • 📰 Real journalism  • ⚡ Instant content
             </div>
           </div>
         </div>
@@ -225,7 +225,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
       {/* Settings Panel */}
       <div className="mb-6 p-4 border border-gray-200 rounded-lg">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          {generationType === 'topic-based' ? '\uD83C\uDFAF Topic-Based Settings' : '\uD83D\uDCF0 Direct News Settings'}
+          {generationType === 'topic-based' ? '🎯 Topic-Based Settings' : '📰 Direct News Settings'}
         </h2>
         {generationType === 'topic-based' ? (
           /* Topic-Based Settings */
@@ -313,7 +313,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
           <div className="space-y-4">
             <div className="bg-blue-50 p-3 rounded-md">
               <p className="text-sm text-blue-700">
-                \uD83D\uDD0D All articles will be sourced from <strong>United States</strong> news outlets for consistency and quality.
+                                🔍 All articles will be sourced from <strong>United States</strong> news outlets for consistency and quality.
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
@@ -411,7 +411,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
           </span>
         ) : (
           <>
-            {generationType === 'topic-based' ? '\uD83C\uDFAF Generate Articles from Topics' : '\uD83D\uDCF0 Generate Articles from News'}
+            {generationType === 'topic-based' ? '🎯 Generate Articles from Topics' : '📰 Generate Articles from News'}
           </>
         )}
       </button>
@@ -419,7 +419,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
       {error && (
         <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-start">
-            <span className="text-red-500 mr-2">Œ</span>
+            <span className="text-red-500 mr-2">❌</span>
             <div>
               <h3 className="text-red-800 font-medium">Generation Failed</h3>
               <p className="text-red-600 text-sm mt-1">{error}</p>
@@ -434,7 +434,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
         }`}>
           <div className="flex items-start mb-4">
             <span className={`mr-2 ${results.type === 'topic-based' ? 'text-blue-500' : 'text-green-500'}`}>
-              \u2705
+              ✅
             </span>
             <div>
               <h3 className={`font-medium ${results.type === 'topic-based' ? 'text-blue-800' : 'text-green-800'}`}>
@@ -446,10 +446,10 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
               <div className={`text-sm mt-2 grid grid-cols-2 md:grid-cols-4 gap-2 ${
                 results.type === 'topic-based' ? 'text-blue-600' : 'text-green-600'
               }`}>
-                <span>\uD83D\uDD0D Processed: {results.processed}</span>
-                <span>\uD83D\uDCBE Saved: {results.saved}</span>
-                <span>\uD83D\uDCC2 Skipped: {results.skipped}</span>
-                <span>\uD83D\uDCF0 Errors: {results.errors}</span>
+                <span>🔍 Processed: {results.processed}</span>
+                <span>💾 Saved: {results.saved}</span>
+                <span>📊 Skipped: {results.skipped}</span>
+                <span>📰 Errors: {results.errors}</span>
               </div>
             </div>
           </div>
@@ -467,10 +467,10 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                     </h5>
                     <div className="text-xs text-gray-500 flex items-center justify-between">
                       <span>
-                        \uD83D\uDCC2 {article.category}  • ⏲️ {new Date(article.publishedAt).toLocaleDateString()}
+                        📍 {article.category}  • 📅 {new Date(article.publishedAt).toLocaleDateString()}
                       </span>
                       {article.source && (
-                        <span>\uD83D\uDCC0 {article.source}</span>
+                        <span>📰 {article.source}</span>
                       )}
                     </div>
                     {article.originalUrl && (
@@ -480,7 +480,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
                         rel="noopener noreferrer"
                         className="text-xs text-blue-600 hover:text-blue-800"
                       >
-                        View Original  ←’
+                        View Original →
                       </a>
                     )}
                   </div>
@@ -491,7 +491,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
           {/* Error Details */}
           {results.errorDetails && results.errorDetails.length > 0 && (
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-              <h4 className="font-medium text-yellow-800 mb-2">\u26A0\uFE0F Some Issues Occurred:</h4>
+              <h4 className="font-medium text-yellow-800 mb-2">⚠️ Some Issues Occurred:</h4>
               <div className="text-sm text-yellow-700 space-y-1">
                 {results.errorDetails.map((error, index) => (
                   <div key={index} className="text-xs">{error}</div>
@@ -504,7 +504,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
       {/* Info Boxes */}
       <div className="mt-6 grid md:grid-cols-2 gap-4">
         <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 className="font-medium text-blue-800 mb-2">\uD83C\uDFAF Topic-Based Generation</h3>
+          <h3 className="font-medium text-blue-800 mb-2">🎯 Topic-Based Generation</h3>
           <ul className="text-sm text-blue-700 space-y-1">
             <li>• Uses trending topics from multiple sources</li>
             <li>• AI-generated comprehensive content</li>
@@ -513,7 +513,7 @@ const UnifiedArticleGenerator: React.FC<UnifiedArticleGeneratorProps> = ({
           </ul>
         </div>
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-          <h3 className="font-medium text-green-800 mb-2">\uD83D\uDCF0 Direct News Generation</h3>
+          <h3 className="font-medium text-green-800 mb-2">📰 Direct News Generation</h3>
           <ul className="text-sm text-green-700 space-y-1">
             <li>• Real articles from 80,000+ sources</li>
             <li>• Professional journalism quality</li>

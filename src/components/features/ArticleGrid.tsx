@@ -180,7 +180,7 @@ function ArticleCard({ article }: { article: Article }) {
               href={`/article/${article.slug}`}
               className="text-blue-600 hover:text-blue-800 font-medium text-sm"
             >
-              Read More  ←’
+              Read More →
             </Link>
           </div>
         </div>

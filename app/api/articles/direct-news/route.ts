@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       hours = 24,
       autoSave = true
     } = body;
-    console.log(`ðŸš€ Generating REAL current news articles...`);
+    console.log(`🚀 Generating REAL current news articles...`);
     console.log(`Settings: categories=${categories.join(',')}, limit=${limit}, hours=${hours}`);
     // Generate REAL current news articles from NewsAPI.org
     const results = await generateRealTimeNewsArticles({
@@ -65,19 +65,25 @@ export async function POST(request: NextRequest) {
     };
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error in real-time news generation API:', error);
+    // Always return valid JSON, even for unexpected errors
     let errorMessage = 'Failed to generate real-time news articles';
     let statusCode = 500;
+    let details = 'Unknown error';
     if (error instanceof Error) {
+      details = error.message;
       if (error.message.includes('NewsAPI') || error.message.includes('API key')) {
         errorMessage = 'NewsAPI.org error - check API key configuration';
         statusCode = 503;
       }
+    } else if (typeof error === 'string') {
+      details = error;
+    } else if (typeof error === 'object' && error !== null) {
+      details = JSON.stringify(error);
     }
     return NextResponse.json(
       { 
         error: errorMessage,
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details,
         troubleshooting: {
           checkNewsAPI: 'Get a free API key from https://newsapi.org and add it to NEWS_API_KEY in .env.local',
           checkConnection: 'Test internet connectivity',

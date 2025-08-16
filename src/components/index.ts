@@ -8,6 +8,7 @@ export { SessionSynchronizer } from './layout/SessionSynchronizer';
 export { default as OptimizedImage } from './ui/OptimizedImage';
 export { default as ShareButtons } from './ui/ShareButtons';
 export { default as BookmarkButton } from './ui/BookmarkButton';
+export { BookmarkProvider, ContextBookmarkButton } from './ui/BookmarkProvider';
 export { default as StructuredData } from './ui/StructuredData';
 export { default as UnsplashAttribution } from './ui/UnsplashAttribution';
 export { default as UnsplashImage } from './ui/UnsplashImage';

@@ -65,7 +65,7 @@ class MediaManager {
         .slice(0, limit);
       // If we don't have enough results, add fallback media
       if (finalResults.length < limit) {
-  console.log('🛠️ Adding fallback media due to insufficient results...');
+        console.log('ðŸ”„ Adding fallback media due to insufficient results...');
         const fallbackMedia = this.getFallbackMedia(category, type, limit - finalResults.length, uniqueId);
         finalResults.push(...fallbackMedia);
       }
@@ -162,7 +162,7 @@ class MediaManager {
         // Add a small delay between requests to be respectful to the API
         await new Promise(resolve => setTimeout(resolve, 100));
       }
-  console.log(`🖼️ Found ${results.length} unique Unsplash images from ${searchQueries.length} diverse queries`);
+      console.log(`ðŸ–¼ï¸ Found ${results.length} unique Unsplash images from ${searchQueries.length} diverse queries`);
       return results;
     } catch (error) {
       console.error('Error searching Unsplash with variety:', error);
@@ -197,7 +197,7 @@ class MediaManager {
     queries.push(`${baseTerms[0]} ${randomModifier}`);
     // Remove duplicates and limit to 4 queries max for performance
     const uniqueQueries = Array.from(new Set(queries)).slice(0, 4);
-  console.log(`🔍 Created ${uniqueQueries.length} diverse search queries:`, uniqueQueries);
+    console.log(`ðŸ” Created ${uniqueQueries.length} diverse search queries:`, uniqueQueries);
     return uniqueQueries;
   }
   /**

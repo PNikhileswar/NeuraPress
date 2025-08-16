@@ -50,7 +50,7 @@ export interface ProcessedCurrentArticle {
 /**
  * Generate current trending topics for today's date
  */
-async function generateCurrentTrendingTopics(categories: string[], limit: number = 10): Promise<CurrentTopic[]> {
+export async function generateCurrentTrendingTopics(categories: string[], limit: number = 10): Promise<CurrentTopic[]> {
   const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   const prompt = `Generate ${limit} current, realistic trending news topics for ${currentDate} (${currentMonth}) across these categories: ${categories.join(', ')}.
@@ -167,7 +167,7 @@ Make it engaging, informative, and feel like genuine current news.`;
 /**
  * Process a trending topic into a complete article
  */
-async function processCurrentTopic(topic: CurrentTopic): Promise<ProcessedCurrentArticle> {
+export async function processCurrentTopic(topic: CurrentTopic): Promise<ProcessedCurrentArticle> {
   // Generate full article content
   console.log(`🛠️ Generating current article: "${topic.title}"`);
   const content = await generateArticleFromTopic(topic);
